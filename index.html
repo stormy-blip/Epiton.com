@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Epiton</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header id="mobileTopbar" class="mobile-topbar">
+      <h2>Epiton</h2>
+      <div class="mobile-actions">
+        <a id="mobileSearchBtn" href="#">Search</a>
+        <a href="#">DM</a>
+      </div>
+    </header>
+
+    <div id="appShell" class="app">
+      <aside class="sidebar">
+        <h1 class="logo"><span class="logo-e">E</span>piton</h1>
+        <nav class="menu">
+          <a class="menu-item active" href="#">Home</a>
+          <a class="menu-item" id="searchNavBtn" href="#">Search</a>
+          <a class="menu-item" href="#">Explore</a>
+          <a class="menu-item" id="reelsNavBtn" href="#">Reels</a>
+          <a class="menu-item" id="snapsNavBtn" href="#">Snaps</a>
+          <a class="menu-item" id="messageNavBtn" href="#">DM</a>
+          <a class="menu-item" id="notificationsNavBtn" href="#">Notifications <span id="notifNavBadge" class="notif-nav-badge" style="display:none;"></span></a>
+          <a class="menu-item" id="createNavBtn" href="#">Create</a>
+          <a class="menu-item" id="profileNavBtn" href="#">Profile</a>
+        </nav>
+      </aside>
+
+      <main class="feed">
+        <section class="stories" id="stories"></section>
+        <section class="upload-card" id="uploadCard" hidden>
+          <div class="upload-card-inner-wrap">
+            <div class="upload-card-header">
+              <h3>Create a post</h3>
+              <button type="button" id="uploadCardCloseBtn" class="icon-btn" aria-label="Close">✕</button>
+            </div>
+            <form id="uploadForm" class="upload-form">
+              <div class="drop-zone" id="dropZone">
+                <div class="drop-zone-inner" id="dropZoneInner">
+                  <span class="drop-icon">🖼️</span>
+                  <p class="drop-text">Drag & drop your image here</p>
+                  <span class="drop-sub">or</span>
+                  <label class="file-label" for="imageInput">Browse file</label>
+                  <input id="imageInput" type="file" accept="image/*" />
+                </div>
+                <div class="image-preview-wrap" id="imagePreviewWrap" style="display:none;">
+                  <img id="imagePreview" src="" alt="Preview" class="image-preview" />
+                  <button type="button" class="remove-image-btn" id="removeImageBtn" aria-label="Remove image">✕</button>
+                </div>
+              </div>
+              <span id="fileName" class="file-name"></span>
+              <input
+                id="captionInput"
+                type="text"
+                maxlength="140"
+                placeholder="Write a caption..."
+              />
+              <button type="submit" class="upload-btn">Share</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="posts" id="posts"></section>
+        <p id="infiniteStatus" class="infinite-status" role="status" aria-live="polite">
+          Scroll to load more posts
+        </p>
+        <div id="scrollSentinel" class="scroll-sentinel" aria-hidden="true"></div>
+      </main>
+
+      <aside class="right-panel">
+        <div class="profile-card">
+          <img id="homeProfileImage" src="https://randomuser.me/api/portraits/men/85.jpg" alt="You" />
+          <div class="profile-card-info">
+            <h3 id="homeProfileHandle">your_handle</h3>
+            <p id="homeProfileName">Your Name</p>
+            <p id="homeProfileBio" class="profile-card-bio">Tell your story here ✨</p>
+          </div>
+          <button id="editProfileBtn" class="edit-profile-btn" aria-label="Edit profile">✏️ Edit</button>
+        </div>
+
+        <div class="suggestions">
+          <div class="suggestions-head">
+            <p>Suggested for you</p>
+            <a href="#">See All</a>
+          </div>
+          <div id="suggestedUsers"></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ===== REELS PAGE ===== -->
+    <div id="reelsPage" class="reels-page" hidden>
+      <div class="reels-page-inner">
+
+        <!-- Upload panel (modal overlay, hidden by default) -->
+        <div class="reels-upload-panel" id="reelsUploadPanel" hidden>
+          <div class="reels-upload-panel-header">
+            <h3>📹 Upload Reels</h3>
+            <button id="reelsCloseBtn" class="icon-btn reels-close-btn" aria-label="Close Reels">✕</button>
+          </div>
+          <form id="reelUploadForm" class="reel-upload-form">
+            <div class="reel-drop-zone" id="reelDropZone">
+              <span class="drop-icon">🎬</span>
+              <p>Drag & drop videos here</p>
+              <span class="drop-sub">or</span>
+              <label class="file-label" for="reelVideoInput">Browse files</label>
+              <input id="reelVideoInput" type="file" accept="video/*" multiple />
+            </div>
+            <input id="reelCaptionInput" type="text" maxlength="120" placeholder="Caption (optional)…" class="reel-caption-field" />
+            <button type="submit" class="upload-btn">Share Reels</button>
+            <p id="reelUploadStatus" class="reel-upload-status"></p>
+          </form>
+        </div>
+
+        <!-- Feed -->
+        <div id="reelsFeed" class="reels-feed"></div>
+
+        <!-- Floating controls -->
+        <button id="reelsMobileCloseBtn" class="reels-mobile-close icon-btn" aria-label="Close Reels">✕</button>
+        <button id="reelsUploadBtn" class="reels-upload-fab" aria-label="Upload reel">➕</button>
+        <button id="reelsCloseBtnDesktop" class="reels-close-desktop icon-btn" aria-label="Close Reels">✕</button>
+      </div>
+    </div>
+
+    <!-- ===== MESSAGES / INBOX ===== -->
+    <div id="messageInbox" class="inbox-overlay">
+
+      <!-- Sidebar: conversation list -->
+      <aside class="inbox-sidebar">
+        <div class="inbox-sidebar-header">
+          <h2>Messages <span id="unreadCount" class="unread-total"></span></h2>
+          <button id="newThreadBtn" class="icon-btn new-msg-btn" title="New message" aria-label="New message">✏️</button>
+          <button class="inbox-close-btn icon-btn" id="inboxCloseBtn" aria-label="Close messages">✕</button>
+        </div>
+
+        <!-- new thread composer -->
+        <form id="newThreadForm" class="new-thread-form" style="display:none;">
+          <input id="threadUserInput"    type="text" placeholder="Username…"       required />
+          <input id="threadStatusInput"  type="text" placeholder="Status (optional)" />
+          <input id="threadMessageInput" type="text" placeholder="First message…"  required />
+          <div class="new-thread-actions">
+            <button type="submit" class="upload-btn">Start</button>
+            <button type="button" id="cancelThreadBtn" class="ghost-btn">Cancel</button>
+          </div>
+        </form>
+
+        <!-- contact search -->
+        <div class="contact-search-wrap">
+          <input id="contactSearchInput" type="search" placeholder="Search contacts…" aria-label="Search contacts" />
+          <button id="contactSearchClear" class="icon-btn" aria-label="Clear search" style="display:none;">✕</button>
+        </div>
+
+        <!-- contacts grid -->
+        <div id="contactsGrid" class="contacts-grid"></div>
+
+        <!-- conversation list -->
+        <div id="conversationList" class="conversation-list-inner"></div>
+      </aside>
+
+      <!-- Main: chat window -->
+      <section class="chat-panel">
+        <div class="chat-header">
+          <button id="chatBackBtn" class="icon-btn chat-back" aria-label="Back">←</button>
+          <img id="chatAvatar" src="https://randomuser.me/api/portraits/men/46.jpg" alt="Chat user" />
+          <div class="chat-header-info">
+            <strong id="chatName">Select a conversation</strong>
+            <span id="chatStatus"></span>
+          </div>
+          <button id="chatProfileBtn" class="icon-btn" aria-label="View profile">👤</button>
+        </div>
+
+        <div id="chatMessages" class="chat-messages"></div>
+        <p id="chatTyping" class="chat-typing"></p>
+
+        <form id="chatForm" class="chat-form">
+          <label class="chat-media-label" for="chatMediaInput" aria-label="Attach media" title="Send photo or video">📎</label>
+          <input id="chatMediaInput" type="file" accept="image/*,video/*" style="display:none;" />
+          <input id="chatInput" type="text" placeholder="Message…" autocomplete="off" aria-label="Type a message" />
+          <button type="submit" class="upload-btn">Send</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- ===== PROFILE EDITOR OVERLAY ===== -->
+    <div id="profileEditor" class="profile-overlay" hidden>
+      <div class="profile-overlay-inner">
+        <div class="profile-overlay-header">
+          <h2>Edit Profile</h2>
+          <button id="profileEditorCloseBtn" class="icon-btn" aria-label="Close">✕</button>
+        </div>
+
+        <!-- avatar preview + upload -->
+        <div class="profile-avatar-wrap">
+          <img id="profilePreview" src="https://randomuser.me/api/portraits/men/85.jpg" alt="Your avatar" class="profile-preview-img" />
+          <label class="profile-avatar-label" for="profileImageInput" aria-label="Change photo">
+            📷 Change photo
+          </label>
+          <input id="profileImageInput" type="file" accept="image/*" />
+        </div>
+
+        <form id="profileForm" class="profile-form">
+          <label>
+            <span>Name</span>
+            <input id="profileNameInput" type="text" placeholder="Your name" maxlength="60" />
+          </label>
+          <label>
+            <span>Username</span>
+            <input id="profileHandleInput" type="text" placeholder="your_handle" maxlength="30" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input id="profileEmailInput" type="email" placeholder="you@example.com" />
+          </label>
+          <label>
+            <span>Location</span>
+            <input id="profileLocationInput" type="text" placeholder="City, Country" maxlength="60" />
+          </label>
+          <label>
+            <span>Bio <small>(emojis welcome ✨)</small></span>
+            <div class="bio-field-wrap">
+              <textarea id="profileBioInput" placeholder="Tell your story here ✨" maxlength="150" rows="3"></textarea>
+              <div class="emoji-picker-wrap">
+                <button type="button" class="emoji-trigger-btn" id="emojiTriggerBtn" aria-label="Insert emoji">😊</button>
+                <div class="emoji-panel" id="emojiPanel">
+                  <span>😊</span><span>😂</span><span>❤️</span><span>🔥</span><span>✨</span>
+                  <span>🎉</span><span>👏</span><span>🙌</span><span>💪</span><span>🌍</span>
+                  <span>📸</span><span>🎨</span><span>🎬</span><span>🎵</span><span>🍕</span>
+                  <span>☕</span><span>🌊</span><span>🏔️</span><span>🌸</span><span>⚡</span>
+                  <span>💡</span><span>🚀</span><span>🦋</span><span>🌙</span><span>⭐</span>
+                  <span>💎</span><span>🎯</span><span>🏆</span><span>👑</span><span>🤝</span>
+                </div>
+              </div>
+            </div>
+          </label>
+          <button type="submit" class="upload-btn">Save changes</button>
+          <p id="profileSavedMsg" class="profile-saved-msg"></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== SEARCH OVERLAY ===== -->
+    <div id="searchOverlay" class="search-overlay" hidden>
+      <div class="search-overlay-inner">
+        <div class="search-overlay-header">
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input id="searchInput" type="search" placeholder="Search people, posts, reels…" autocomplete="off" aria-label="Search" />
+            <button id="searchClearBtn" class="icon-btn" aria-label="Clear" style="display:none;">✕</button>
+          </div>
+          <button id="searchCloseBtn" class="ghost-btn">Cancel</button>
+        </div>
+        <div class="search-tabs">
+          <button class="search-tab active" data-tab="people">People</button>
+          <button class="search-tab" data-tab="posts">Posts</button>
+          <button class="search-tab" data-tab="reels">Reels</button>
+        </div>
+        <div id="searchResults" class="search-results">
+          <p class="search-empty">Start typing to search…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NOTIFICATIONS PAGE ===== -->
+    <div id="notificationsPanel" class="notifications-panel" hidden aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="notifications-page-inner">
+        <div class="notifications-page-header">
+          <h2>🔔 Notifications</h2>
+          <div class="notif-header-actions">
+            <button id="clearNotificationsBtn" class="notif-clear-btn">Clear all</button>
+            <button id="notificationsPanelCloseBtn" class="icon-btn notif-close-btn" aria-label="Close">✕</button>
+          </div>
+        </div>
+        <div id="notificationsList" class="notifications-list"></div>
+        <div id="notificationsEmpty" class="notifications-empty-state" style="display:none;">
+          <span>🔔</span>
+          <p>No notifications yet</p>
+          <small>Likes, comments and follows will show up here</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+      <a class="mob-nav-item active" href="#" aria-label="Home">
+        <span class="mob-nav-icon">🏠</span>
+        <span class="mob-nav-label">Home</span>
+      </a>
+      <a class="mob-nav-item" href="#" aria-label="Search">
+        <span class="mob-nav-icon">🔍</span>
+        <span class="mob-nav-label">Search</span>
+      </a>
+      <a class="mob-nav-item" href="#" aria-label="Reels">
+        <span class="mob-nav-icon">🎬</span>
+        <span class="mob-nav-label">Reels</span>
+      </a>
+      <a class="mob-nav-item" href="#" aria-label="Snaps" id="mobSnapsNav">
+        <span class="mob-nav-icon">⚡</span>
+        <span class="mob-nav-label">Snaps</span>
+      </a>
+      <a class="mob-nav-item" href="#" aria-label="Messages">
+        <span class="mob-nav-icon">💬</span>
+        <span class="mob-nav-label">DM</span>
+      </a>
+      <a class="mob-nav-item" href="#" aria-label="Profile" id="mobProfileNav">
+        <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Profile" class="mob-nav-avatar" />
+        <span class="mob-nav-label">Profile</span>
+      </a>
+    </nav>
+
+    <!-- ===== CONTACT PROFILE MODAL ===== -->
+    <div id="contactProfileModal" class="profile-modal-overlay" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="User profile">
+      <div class="profile-modal-inner">
+        <button id="profileModalClose" class="profile-modal-close icon-btn" aria-label="Close profile">✕</button>
+
+        <!-- cover + avatar -->
+        <div class="profile-modal-cover">
+          <div class="profile-modal-cover-bg"></div>
+          <img id="profileModalAvatar" src="" alt="" class="profile-modal-avatar" />
+        </div>
+
+        <!-- identity -->
+        <div class="profile-modal-identity">
+          <h2 id="profileModalName"></h2>
+          <p id="profileModalHandle" class="profile-modal-handle"></p>
+          <p id="profileModalMeta" class="profile-modal-meta"></p>
+        </div>
+
+        <!-- stats row: posts / followers / following / likes -->
+        <div class="profile-modal-stats">
+          <div class="profile-stat">
+            <span id="profileModalPosts" class="stat-value"></span>
+            <span class="stat-label">Posts</span>
+          </div>
+          <div class="profile-stat">
+            <span id="profileModalFollowers" class="stat-value"></span>
+            <span class="stat-label">Followers</span>
+          </div>
+          <div class="profile-stat">
+            <span id="profileModalFollowing" class="stat-value"></span>
+            <span class="stat-label">Following</span>
+          </div>
+          <div class="profile-stat">
+            <span id="profileModalLikes" class="stat-value"></span>
+            <span class="stat-label">Likes</span>
+          </div>
+        </div>
+
+        <!-- bio -->
+        <p id="profileModalBio" class="profile-modal-bio"></p>
+
+        <!-- tags -->
+        <div id="profileModalTags" class="profile-modal-tags"></div>
+
+        <!-- actions -->
+        <div class="profile-modal-actions">
+          <button id="profileModalFollowBtn" class="upload-btn" data-follow-user="">Follow</button>
+          <button id="profileModalUnfollowBtn" class="ghost-btn" data-follow-user="">Unfollow</button>
+          <button id="profileModalDone" class="ghost-btn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STORY VIEWER ===== -->
+    <div id="storyViewer" class="story-viewer" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Story viewer">
+      <!-- progress bars -->
+      <div class="story-progress-bar" id="storyProgressBar"></div>
+
+      <!-- header -->
+      <div class="story-viewer-header">
+        <img id="storyViewerAvatar" src="" alt="" class="story-viewer-avatar" />
+        <div class="story-viewer-meta">
+          <strong id="storyViewerName"></strong>
+          <span id="storyViewerTime">Just now</span>
+        </div>
+        <button id="storyViewerClose" class="story-viewer-close icon-btn" aria-label="Close story">✕</button>
+      </div>
+
+      <!-- video -->
+      <video id="storyViewerVideo" class="story-viewer-video" playsinline muted></video>
+
+      <!-- caption -->
+      <p id="storyViewerCaption" class="story-viewer-caption"></p>
+
+      <!-- tap zones -->
+      <button class="story-tap-zone story-tap-prev" id="storyTapPrev" aria-label="Previous story"></button>
+      <button class="story-tap-zone story-tap-next" id="storyTapNext" aria-label="Next story"></button>
+
+      <!-- mute toggle -->
+      <button id="storyMuteBtn" class="story-mute-btn icon-btn" aria-label="Toggle mute">🔇</button>
+    </div>
+
+    <!-- ===== STORY UPLOAD ===== -->
+    <div id="storyUploadModal" class="story-upload-modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Add story">
+      <div class="story-upload-inner">
+        <div class="story-upload-header">
+          <h3>Add to Your Story</h3>
+          <button id="storyUploadClose" class="icon-btn" aria-label="Close">✕</button>
+        </div>
+        <div class="story-drop-zone" id="storyDropZone">
+          <span class="drop-icon">🎬</span>
+          <p>Drag & drop a short video here (max 20 MB)</p>
+          <span class="drop-sub">or</span>
+          <label class="file-label" for="storyFileInput">Browse file</label>
+          <input id="storyFileInput" type="file" accept="video/*" />
+        </div>
+        <div id="storyVideoPreviewWrap" style="display:none;">
+          <video id="storyVideoPreview" class="story-video-preview" controls muted playsinline></video>
+          <button type="button" id="storyRemoveVideoBtn" class="remove-image-btn" aria-label="Remove">✕</button>
+        </div>
+        <input id="storyCaption" type="text" maxlength="80" placeholder="Add a caption… (optional)" class="story-caption-input" />
+        <button id="storyShareBtn" class="upload-btn" disabled>Share Story</button>
+      </div>
+    </div>
+
+    <!-- ===== MY PROFILE PAGE ===== -->
+    <div id="myProfilePage" class="my-profile-page" hidden aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="my-profile-inner">
+
+        <!-- Header -->
+        <div class="my-profile-header">
+          <button id="myProfileCloseBtn" class="icon-btn my-profile-close" aria-label="Close">✕</button>
+          <div class="my-profile-header-actions">
+            <button id="myProfileSwitchBtn" class="ghost-btn my-profile-action-btn">🔄 Switch</button>
+            <button id="myProfileLogoutBtn" class="ghost-btn my-profile-action-btn my-profile-logout-btn">↩ Log out</button>
+            <button id="myProfileEditBtn" class="my-profile-edit-btn">✏️ Edit Profile</button>
+          </div>
+        </div>
+
+        <!-- Avatar + identity -->
+        <div class="my-profile-hero">
+          <div class="my-profile-avatar-wrap">
+            <img id="myProfileAvatar" src="https://randomuser.me/api/portraits/men/85.jpg" alt="Your avatar" class="my-profile-avatar-img" />
+          </div>
+          <div class="my-profile-identity">
+            <h2 id="myProfileName">Your Name</h2>
+            <p id="myProfileHandle" class="my-profile-handle">@your_handle</p>
+            <p id="myProfileBio" class="my-profile-bio">Tell your story here ✨</p>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="my-profile-stats">
+          <div class="my-profile-stat">
+            <span id="myStatPosts" class="my-stat-value">0</span>
+            <span class="my-stat-label">Posts</span>
+          </div>
+          <div class="my-profile-stat">
+            <span id="myStatReels" class="my-stat-value">0</span>
+            <span class="my-stat-label">Reels</span>
+          </div>
+          <div class="my-profile-stat">
+            <span id="myStatLikes" class="my-stat-value">0</span>
+            <span class="my-stat-label">Likes</span>
+          </div>
+          <div class="my-profile-stat">
+            <span id="myStatFollowers" class="my-stat-value">0</span>
+            <span class="my-stat-label">Followers</span>
+          </div>
+          <div class="my-profile-stat">
+            <span id="myStatFollowing" class="my-stat-value">0</span>
+            <span class="my-stat-label">Following</span>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="my-profile-tabs" role="tablist">
+          <button class="my-profile-tab active" data-tab="posts" role="tab">📷 Posts</button>
+          <button class="my-profile-tab" data-tab="reels" role="tab">🎬 Reels</button>
+          <button class="my-profile-tab" data-tab="liked-posts" role="tab">❤️ Liked Posts</button>
+          <button class="my-profile-tab" data-tab="liked-reels" role="tab">❤️ Liked Reels</button>
+          <button class="my-profile-tab" data-tab="following" role="tab">👥 Following</button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="myProfileTabContent" class="my-profile-tab-content"></div>
+      </div>
+    </div>
+
+    <!-- Theme Button -->
+    <button id="themeToggle" class="theme-toggle-btn" aria-label="Change theme">🎨</button>
+
+    <!-- Theme Studio Panel -->
+    <div id="themeStudio" class="theme-studio" role="dialog" aria-label="Theme selector">
+      <div class="studio-header">
+        <span class="studio-icon">✦</span>
+        <span class="studio-title">Appearance</span>
+        <span class="studio-icon">✦</span>
+      </div>
+      <div class="studio-divider"></div>
+      <p class="studio-section-label">Color Theme</p>
+      <button class="theme-scroll-btn" id="themeScrollUp" aria-label="Scroll up">▲</button>
+      <div id="themeSwitches" class="theme-switches-scroll"></div>
+      <button class="theme-scroll-btn" id="themeScrollDown" aria-label="Scroll down">▼</button>
+      <div class="studio-divider"></div>
+      <p class="studio-section-label">🌑 Dark Backgrounds</p>
+      <div id="bgSwitches" class="bg-switches">
+        <button class="bg-btn" data-bg="embers">🔥 Embers</button>
+        <button class="bg-btn" data-bg="nebula">� Nebula</button>
+        <button class="bg-btn" data-bg="matrix">💻 Matrix</button>
+        <button class="bg-btn" data-bg="starfield">⭐ Starfield</button>
+        <p class="studio-section-label" style="margin-top:6px;">☀️ Light Backgrounds</p>
+        <button class="bg-btn" data-bg="petals">🌸 Petals</button>
+        <button class="bg-btn" data-bg="bubbles">🫧 Bubbles</button>
+        <button class="bg-btn" data-bg="confetti">🎊 Confetti</button>
+        <button class="bg-btn" data-bg="lavalamp">🫧 Lava Lamp</button>
+        <p class="studio-section-label" style="margin-top:6px;">✦ Floating</p>
+        <button class="bg-btn" data-bg="auroradrift">🌠 Aurora Drift</button>
+        <button class="bg-btn active" data-bg="none">✕ None</button>
+      </div>
+    </div>
+
+    <!-- Animated Background Canvas -->
+    <canvas id="bgCanvas" class="bg-canvas" aria-hidden="true"></canvas>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- ===== NEW MESSAGE MODAL ===== -->
+    <div id="newMsgModal" class="new-msg-modal-overlay" hidden role="dialog" aria-modal="true" aria-label="New message">
+      <div class="new-msg-modal-card">
+        <div class="new-msg-modal-header">
+          <strong>New Message</strong>
+          <button id="newMsgModalClose" class="icon-btn" aria-label="Close">✕</button>
+        </div>
+        <div class="new-msg-search-wrap">
+          <span class="search-icon">🔍</span>
+          <input id="newMsgSearch" type="search" placeholder="Search contacts or enter username…" autocomplete="off" aria-label="Search contacts" />
+        </div>
+        <div id="newMsgContactList" class="new-msg-contact-list"></div>
+        <div class="new-msg-modal-footer">
+          <input id="newMsgFirstMsg" type="text" placeholder="First message (optional)…" maxlength="300" />
+          <button id="newMsgSendBtn" class="upload-btn" disabled>Start chat</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LOGIN / SWITCH ACCOUNT OVERLAY ===== -->
+    <div id="authOverlay" class="auth-overlay" hidden>
+      <div class="auth-card">
+        <!-- Login panel -->
+        <div id="authLoginPanel" class="auth-panel">
+          <div class="auth-logo"><span class="logo-e">E</span>piton</div>
+          <p class="auth-tagline">Sign in to continue</p>
+          <form id="authLoginForm" class="auth-form" novalidate>
+            <label class="auth-label">
+              <span>Username</span>
+              <input id="authUsernameInput" type="text" placeholder="your_handle" autocomplete="username" maxlength="30" required />
+            </label>
+            <label class="auth-label">
+              <span>Password</span>
+              <input id="authPasswordInput" type="password" placeholder="••••••" autocomplete="current-password" required />
+            </label>
+            <p id="authError" class="auth-error" hidden></p>
+            <button type="submit" class="upload-btn auth-submit-btn">Log in</button>
+          </form>
+          <div class="auth-divider"><span>or</span></div>
+          <button id="authCreateAccountBtn" class="ghost-btn auth-create-btn">Create new account</button>
+          <button id="authSwitchAccountBtn" class="auth-switch-link">Switch account</button>
+        </div>
+
+        <!-- Create account panel -->
+        <div id="authCreatePanel" class="auth-panel" hidden>
+          <div class="auth-logo"><span class="logo-e">E</span>piton</div>
+          <p class="auth-tagline">Create your account</p>
+          <form id="authCreateForm" class="auth-form" novalidate>
+            <label class="auth-label">
+              <span>Name</span>
+              <input id="authCreateName" type="text" placeholder="Your Name" maxlength="60" required />
+            </label>
+            <label class="auth-label">
+              <span>Username</span>
+              <input id="authCreateUsername" type="text" placeholder="your_handle" maxlength="30" required />
+            </label>
+            <label class="auth-label">
+              <span>Password</span>
+              <input id="authCreatePassword" type="password" placeholder="Must be: Epiton" required />
+            </label>
+            <p id="authCreateError" class="auth-error" hidden></p>
+            <button type="submit" class="upload-btn auth-submit-btn">Create account</button>
+          </form>
+          <button id="authBackToLoginBtn" class="auth-switch-link">← Back to login</button>
+        </div>
+
+        <!-- Switch account panel -->
+        <div id="authSwitchPanel" class="auth-panel" hidden>
+          <div class="auth-logo"><span class="logo-e">E</span>piton</div>
+          <p class="auth-tagline">Switch account</p>
+          <div id="authAccountList" class="auth-account-list"></div>
+          <button id="authAddAccountBtn" class="ghost-btn auth-create-btn">+ Add account</button>
+          <button id="authSwitchBackBtn" class="auth-switch-link">← Back to login</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SNAPS PAGE ===== -->
+    <div id="snapsPage" class="snaps-page" hidden aria-hidden="true" role="dialog" aria-modal="true">
+
+      <!-- Header -->
+      <div class="snaps-header">
+        <h2 class="snaps-title">⚡ Snaps</h2>
+        <div class="snaps-header-actions">
+          <button id="snapsCameraBtn" class="snaps-icon-btn" aria-label="Open camera" title="Take a photo">📷</button>
+          <button id="snapsCloseBtn" class="snaps-icon-btn" aria-label="Close Snaps">✕</button>
+        </div>
+      </div>
+
+      <!-- Snaps feed -->
+      <div id="snapsFeed" class="snaps-feed">
+        <p class="snaps-empty">No snaps yet. Hit ＋ to send one ⚡</p>
+      </div>
+
+      <!-- FAB -->
+      <button id="snapsAddBtn" class="snaps-fab" aria-label="Add snap">＋</button>
+
+      <!-- Upload panel (hidden by default, slides up) -->
+      <div id="snapsUploadPanel" class="snaps-upload-panel" hidden>
+        <div class="snaps-upload-panel-inner">
+          <div class="snaps-upload-panel-header">
+            <span class="snaps-panel-title">New Snap</span>
+            <button id="snapsUploadCloseBtn" class="snaps-icon-btn" aria-label="Close">✕</button>
+          </div>
+
+          <!-- Camera capture -->
+          <div class="snaps-camera-section">
+            <video id="snapsCameraPreview" class="snaps-camera-preview" autoplay playsinline muted hidden></video>
+            <canvas id="snapsCameraCanvas" class="snaps-camera-canvas" hidden></canvas>
+            <div class="snaps-camera-controls" id="snapsCameraControls" hidden>
+              <button id="snapsCaptureBtn" class="snaps-capture-btn" aria-label="Take photo">📸</button>
+              <button id="snapsCameraStopBtn" class="snaps-icon-btn" aria-label="Stop camera">✕</button>
+            </div>
+          </div>
+
+          <!-- Drop zone / file pick -->
+          <div class="snaps-drop-zone" id="snapsDropZone">
+            <span class="snaps-drop-icon">🖼️</span>
+            <p class="snaps-drop-text">Drop photo or video here</p>
+            <label class="file-label" for="snapsFileInput">Browse file</label>
+            <input id="snapsFileInput" type="file" accept="image/*,video/*" />
+          </div>
+
+          <!-- Preview -->
+          <div id="snapsPreviewWrap" class="snaps-preview-wrap" hidden></div>
+
+          <input id="snapsCaptionInput" type="text" maxlength="80" placeholder="Add a caption… (optional)" class="snaps-caption-input" />
+          <button id="snapsShareBtn" class="upload-btn snaps-share-btn" disabled>⚡ Send Snap</button>
+        </div>
+      </div>
+
+      <!-- Camera permission modal -->
+      <div id="snapsCameraModal" class="snaps-camera-modal" hidden>
+        <div class="snaps-camera-modal-inner">
+          <span class="snaps-camera-modal-icon">📷</span>
+          <h3>Camera Access</h3>
+          <p>Allow Epiton to use your camera to take snaps directly.</p>
+          <div class="snaps-camera-modal-actions">
+            <button id="snapsCameraAllowBtn" class="upload-btn">Allow Camera</button>
+            <button id="snapsCameraDenyBtn" class="ghost-btn">Not now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      (function () {
+        const THEME_KEY = "instagram_theme_mode";
+        const THEMES = [
+          { id: "light",    label: "☀️ Light" },
+          { id: "dark",     label: "🌙 Dark" },
+          { id: "void",     label: "⚡ Void" },
+          { id: "abyss",    label: "🌑 Abyss" },
+          { id: "aurora",   label: "🌌 Aurora" },
+          { id: "spectre",  label: "🔮 Spectre" },
+          { id: "phantom",  label: "👻 Phantom" },
+          { id: "inferno",  label: "🌋 Inferno" }
+        ];
+
+        const toggleBtn = document.getElementById("themeToggle");
+        const studio = document.getElementById("themeStudio");
+        const switches = document.getElementById("themeSwitches");
+
+        function applyTheme(id) {
+          document.documentElement.setAttribute("data-theme", id);
+          localStorage.setItem(THEME_KEY, id);
+          switches.querySelectorAll("button").forEach((btn) => {
+            btn.classList.toggle("active", btn.dataset.theme === id);
+          });
+        }
+
+        THEMES.forEach(({ id, label }) => {
+          const btn = document.createElement("button");
+          btn.textContent = label;
+          btn.dataset.theme = id;
+          btn.addEventListener("click", () => {
+            applyTheme(id);
+            studio.classList.remove("open");
+          });
+          switches.appendChild(btn);
+        });
+
+        toggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          studio.classList.toggle("open");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!studio.contains(e.target) && e.target !== toggleBtn) {
+            studio.classList.remove("open");
+          }
+        });
+
+        // ── Theme list scroll buttons ──
+        const scrollAmt = 80;
+        document.getElementById("themeScrollUp").addEventListener("click", () => {
+          switches.scrollBy({ top: -scrollAmt, behavior: "smooth" });
+        });
+        document.getElementById("themeScrollDown").addEventListener("click", () => {
+          switches.scrollBy({ top: scrollAmt, behavior: "smooth" });
+        });
+
+        applyTheme(localStorage.getItem(THEME_KEY) || "light");
+
+        // ===== ANIMATED BACKGROUNDS =====
+        const BG_KEY = "epiton_bg_mode";
+        const canvas = document.getElementById("bgCanvas");
+        const ctx = canvas.getContext("2d");
+        let bgMode = localStorage.getItem(BG_KEY) || "none";
+        let animFrame = null;
+        let pool = [];
+        let bgT = 0;
+
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", () => { resizeCanvas(); });
+        resizeCanvas();
+
+        function clearBg() {
+          if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.style.opacity = "0";
+          pool = []; bgT = 0;
+        }
+
+        const W = () => canvas.width, H = () => canvas.height;
+        const rand = (a, b) => Math.random() * (b - a) + a;
+
+        /* ── DARK 1: EMBERS ── floating orange/red sparks rising */
+        function initEmbers() {
+          pool = Array.from({ length: 90 }, () => ({
+            x: rand(0, W()), y: rand(0, H()),
+            r: rand(1, 3.5),
+            vx: rand(-0.4, 0.4), vy: rand(-1.2, -0.3),
+            life: rand(0, 1), decay: rand(0.003, 0.007),
+            hue: rand(10, 40)
+          }));
+        }
+        function drawEmbers() {
+          ctx.clearRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.life -= p.decay; p.x += p.vx; p.y += p.vy;
+            p.vx += rand(-0.02, 0.02);
+            if (p.life <= 0 || p.y < -10) {
+              p.x = rand(0, W()); p.y = H() + 5;
+              p.life = rand(0.6, 1); p.vy = rand(-1.2, -0.3);
+              p.hue = rand(10, 40);
+            }
+            const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.5);
+            g.addColorStop(0, `hsla(${p.hue},100%,70%,${p.life * 0.9})`);
+            g.addColorStop(1, `hsla(${p.hue},100%,40%,0)`);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = g; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawEmbers);
+        }
+
+        /* ── DARK 2: NEBULA ── slow drifting coloured gas clouds */
+        function initNebula() {
+          pool = Array.from({ length: 7 }, (_, i) => ({
+            x: rand(0.1, 0.9), y: rand(0.1, 0.9),
+            rx: rand(0.18, 0.38), ry: rand(0.12, 0.28),
+            hue: [260, 200, 320, 180, 290, 220, 340][i],
+            t: rand(0, Math.PI * 2), speed: rand(0.0005, 0.0012)
+          }));
+        }
+        function drawNebula() {
+          ctx.clearRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.t += p.speed;
+            const cx = (p.x + Math.sin(p.t) * 0.06) * W();
+            const cy = (p.y + Math.cos(p.t * 0.7) * 0.05) * H();
+            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, p.rx * W());
+            g.addColorStop(0, `hsla(${p.hue},80%,55%,0.13)`);
+            g.addColorStop(0.5, `hsla(${p.hue + 30},70%,40%,0.07)`);
+            g.addColorStop(1, `hsla(${p.hue},60%,30%,0)`);
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, p.rx * W(), p.ry * H(), p.t * 0.3, 0, Math.PI * 2);
+            ctx.fillStyle = g; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawNebula);
+        }
+
+        /* ── DARK 3: MATRIX ── falling green code rain */
+        function initMatrix() {
+          const cols = Math.floor(W() / 16);
+          pool = Array.from({ length: cols }, (_, i) => ({
+            x: i * 16, y: rand(-H(), 0),
+            speed: rand(2, 6), chars: []
+          }));
+        }
+        function drawMatrix() {
+          ctx.fillStyle = "rgba(0,0,0,0.06)";
+          ctx.fillRect(0, 0, W(), H());
+          ctx.font = "13px monospace";
+          pool.forEach(col => {
+            col.y += col.speed;
+            if (col.y > H()) { col.y = rand(-200, -20); col.speed = rand(2, 6); }
+            const char = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
+            ctx.fillStyle = `rgba(0,255,80,${rand(0.5, 1)})`;
+            ctx.fillText(char, col.x, col.y);
+            ctx.fillStyle = "rgba(180,255,180,0.9)";
+            ctx.fillText(char, col.x, col.y - 16);
+          });
+          animFrame = requestAnimationFrame(drawMatrix);
+        }
+
+        /* ── LIGHT 1: PETALS ── soft pink/white petals drifting down */
+        function initPetals() {
+          pool = Array.from({ length: 55 }, () => ({
+            x: rand(0, W()), y: rand(-H(), H()),
+            r: rand(4, 10), rot: rand(0, Math.PI * 2),
+            vx: rand(-0.5, 0.5), vy: rand(0.4, 1.4),
+            vrot: rand(-0.02, 0.02),
+            hue: rand(330, 360), alpha: rand(0.3, 0.7)
+          }));
+        }
+        function drawPetals() {
+          ctx.clearRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.y += p.vy; p.x += p.vx + Math.sin(p.y * 0.01) * 0.4;
+            p.rot += p.vrot;
+            if (p.y > H() + 20) { p.y = -20; p.x = rand(0, W()); }
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, p.r, p.r * 0.5, 0, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.hue},80%,80%,${p.alpha})`;
+            ctx.fill();
+            ctx.restore();
+          });
+          animFrame = requestAnimationFrame(drawPetals);
+        }
+
+        /* ── LIGHT 2: BUBBLES ── rising translucent circles */
+        function initBubbles() {
+          pool = Array.from({ length: 40 }, () => ({
+            x: rand(0, W()), y: rand(0, H()),
+            r: rand(8, 36), vy: rand(-0.4, -1.2),
+            vx: rand(-0.2, 0.2), alpha: rand(0.08, 0.22),
+            hue: rand(190, 230)
+          }));
+        }
+        function drawBubbles() {
+          ctx.clearRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.y += p.vy; p.x += p.vx;
+            if (p.y + p.r < 0) { p.y = H() + p.r; p.x = rand(0, W()); }
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsla(${p.hue},70%,60%,${p.alpha * 2})`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            const g = ctx.createRadialGradient(p.x - p.r * 0.3, p.y - p.r * 0.3, 0, p.x, p.y, p.r);
+            g.addColorStop(0, `hsla(${p.hue},80%,95%,${p.alpha})`);
+            g.addColorStop(1, `hsla(${p.hue},60%,70%,0)`);
+            ctx.fillStyle = g; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawBubbles);
+        }
+
+        /* ── LIGHT 3: CONFETTI ── colourful tumbling rectangles */
+        function initConfetti() {
+          pool = Array.from({ length: 70 }, () => ({
+            x: rand(0, W()), y: rand(-H(), H()),
+            w: rand(6, 14), h: rand(3, 7),
+            rot: rand(0, Math.PI * 2), vrot: rand(-0.04, 0.04),
+            vy: rand(0.8, 2.2), vx: rand(-0.5, 0.5),
+            hue: rand(0, 360), alpha: rand(0.5, 0.9)
+          }));
+        }
+        function drawConfetti() {
+          ctx.clearRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.y += p.vy; p.x += p.vx; p.rot += p.vrot;
+            if (p.y > H() + 20) { p.y = -20; p.x = rand(0, W()); }
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            ctx.fillStyle = `hsla(${p.hue},85%,60%,${p.alpha})`;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          });
+          animFrame = requestAnimationFrame(drawConfetti);
+        }
+
+        /* ── FLOATING 1: STARFIELD ── deep space parallax stars */
+        function initStarfield() {
+          pool = Array.from({ length: 180 }, () => ({
+            x: rand(0, W()), y: rand(0, H()),
+            r: rand(0.4, 2.2), speed: rand(0.05, 0.5),
+            alpha: rand(0.3, 1), twinkle: rand(0, Math.PI * 2)
+          }));
+        }
+        function drawStarfield() {
+          ctx.fillStyle = "rgba(0,0,0,0.18)";
+          ctx.fillRect(0, 0, W(), H());
+          bgT += 0.018;
+          pool.forEach(p => {
+            p.y += p.speed; p.twinkle += 0.04;
+            if (p.y > H()) { p.y = 0; p.x = rand(0, W()); }
+            const a = p.alpha * (0.6 + 0.4 * Math.sin(p.twinkle));
+            const hue = rand(200, 260);
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${hue},60%,95%,${a})`; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawStarfield);
+        }
+
+        /* ── FLOATING 2: AURORA DRIFT ── sweeping northern lights */
+        function drawAuroraDrift() {
+          ctx.clearRect(0, 0, W(), H());
+          bgT += 0.006;
+          const bands = [
+            { hue: 160, y: 0.25, amp: 0.08, speed: 1.0 },
+            { hue: 200, y: 0.40, amp: 0.06, speed: 0.7 },
+            { hue: 280, y: 0.55, amp: 0.09, speed: 1.3 },
+            { hue: 140, y: 0.35, amp: 0.05, speed: 0.5 }
+          ];
+          bands.forEach(b => {
+            const cy = (b.y + Math.sin(bgT * b.speed) * b.amp) * H();
+            const g = ctx.createLinearGradient(0, cy - H() * 0.18, 0, cy + H() * 0.18);
+            g.addColorStop(0,   `hsla(${b.hue},90%,60%,0)`);
+            g.addColorStop(0.4, `hsla(${b.hue},90%,55%,0.12)`);
+            g.addColorStop(0.5, `hsla(${b.hue + 20},85%,65%,0.18)`);
+            g.addColorStop(0.6, `hsla(${b.hue},90%,55%,0.12)`);
+            g.addColorStop(1,   `hsla(${b.hue},90%,60%,0)`);
+            ctx.fillStyle = g;
+            ctx.fillRect(0, cy - H() * 0.18, W(), H() * 0.36);
+          });
+          animFrame = requestAnimationFrame(drawAuroraDrift);
+        }
+
+        /* ── FLOATING 3: LAVA LAMP ── slow rising blobs */
+        function initLavaLamp() {
+          pool = Array.from({ length: 8 }, (_, i) => ({
+            x: rand(0.1, 0.9), y: rand(0.2, 0.9),
+            rx: rand(0.06, 0.14), ry: rand(0.08, 0.18),
+            vy: rand(-0.0004, -0.0001),
+            hue: [20, 340, 40, 300, 15, 330, 50, 310][i],
+            t: rand(0, Math.PI * 2), wobble: rand(0.001, 0.003)
+          }));
+        }
+        function drawLavaLamp() {
+          ctx.clearRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.y += p.vy; p.t += p.wobble;
+            if (p.y < -0.2) { p.y = 1.1; p.x = rand(0.1, 0.9); }
+            const cx = (p.x + Math.sin(p.t) * 0.04) * W();
+            const cy = p.y * H();
+            const rx = (p.rx + Math.sin(p.t * 1.3) * 0.02) * W();
+            const ry = (p.ry + Math.cos(p.t) * 0.02) * H();
+            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rx, ry));
+            g.addColorStop(0,   `hsla(${p.hue},90%,65%,0.22)`);
+            g.addColorStop(0.6, `hsla(${p.hue + 20},80%,55%,0.12)`);
+            g.addColorStop(1,   `hsla(${p.hue},70%,45%,0)`);
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, rx, ry, p.t * 0.2, 0, Math.PI * 2);
+            ctx.fillStyle = g; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawLavaLamp);
+        }
+
+        /* ── UNIQUE 1: DNA HELIX ── double helix scrolling vertically */
+        let dnaT = 0;
+        function drawDNA() {
+          ctx.clearRect(0, 0, W(), H());
+          dnaT += 0.025;
+          const cx = W() / 2, amp = Math.min(W() * 0.18, 120);
+          const step = 18, total = Math.ceil(H() / step) + 2;
+          for (let i = 0; i < total; i++) {
+            const y = (i * step - (dnaT * 60) % (step * total) + H() * 2) % (H() + step * 2) - step;
+            const phase = i * 0.38 + dnaT;
+            const x1 = cx + Math.sin(phase) * amp;
+            const x2 = cx + Math.sin(phase + Math.PI) * amp;
+            const t = (Math.sin(phase) + 1) / 2;
+            const hue1 = 200 + t * 60, hue2 = 320 - t * 60;
+            // strand dots
+            ctx.beginPath(); ctx.arc(x1, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${hue1},90%,65%,0.85)`; ctx.fill();
+            ctx.beginPath(); ctx.arc(x2, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${hue2},90%,65%,0.85)`; ctx.fill();
+            // rung
+            const alpha = 0.15 + Math.abs(Math.sin(phase)) * 0.25;
+            ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y);
+            ctx.strokeStyle = `rgba(180,180,255,${alpha})`; ctx.lineWidth = 1.5; ctx.stroke();
+          }
+          animFrame = requestAnimationFrame(drawDNA);
+        }
+
+        /* ── UNIQUE 2: PULSE GRID ── expanding rings from grid nodes */
+        function initPulse() {
+          const cols = Math.ceil(W() / 120) + 1, rows = Math.ceil(H() / 120) + 1;
+          pool = [];
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+              pool.push({ x: c * 120, y: r * 120, phase: rand(0, Math.PI * 2) });
+            }
+          }
+        }
+        function drawPulse() {
+          ctx.clearRect(0, 0, W(), H());
+          bgT += 0.022;
+          const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+          pool.forEach(p => {
+            const wave = (Math.sin(bgT + p.phase) + 1) / 2;
+            const maxR = 52, r = wave * maxR;
+            const alpha = (1 - wave) * (isDark ? 0.18 : 0.12);
+            const hue = isDark ? 220 + wave * 60 : 200 + wave * 40;
+            ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsla(${hue},80%,${isDark ? 65 : 50}%,${alpha})`;
+            ctx.lineWidth = 1.2; ctx.stroke();
+            // dot at node
+            ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${hue},80%,60%,${isDark ? 0.3 : 0.2})`; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawPulse);
+        }
+
+        function applyBg(mode) {
+          bgMode = mode;
+          localStorage.setItem(BG_KEY, mode);
+          document.getElementById("bgSwitches").querySelectorAll(".bg-btn").forEach(b => {
+            b.classList.toggle("active", b.dataset.bg === mode);
+          });
+          clearBg();
+          if (mode === "none") return;
+          canvas.style.opacity = "1";
+          if      (mode === "embers")     { initEmbers();    drawEmbers(); }
+          else if (mode === "nebula")     { initNebula();    drawNebula(); }
+          else if (mode === "matrix")     { initMatrix();    drawMatrix(); }
+          else if (mode === "starfield")  { initStarfield(); drawStarfield(); }
+          else if (mode === "petals")     { initPetals();    drawPetals(); }
+          else if (mode === "bubbles")    { initBubbles();   drawBubbles(); }
+          else if (mode === "confetti")   { initConfetti();  drawConfetti(); }
+          else if (mode === "lavalamp")   { initLavaLamp();  drawLavaLamp(); }
+          else if (mode === "auroradrift"){ drawAuroraDrift(); }
+          else if (mode === "dna")        { drawDNA(); }
+          else if (mode === "pulse")      { initPulse();     drawPulse(); }
+        }
+
+        document.getElementById("bgSwitches").addEventListener("click", e => {
+          const btn = e.target.closest(".bg-btn");
+          if (btn) { applyBg(btn.dataset.bg); studio.classList.remove("open"); }
+        });
+
+        // re-init on resize so grid/columns recalculate
+        window.addEventListener("resize", () => {
+          if (bgMode !== "none") { clearBg(); applyBg(bgMode); }
+        });
+
+        applyBg(bgMode);
+      })();
+    </script>
+
+    <script>
+      // ===== INBOX CLOSE + MOBILE DM =====
+      (function () {
+        const inbox = document.getElementById("messageInbox");
+        const closeBtn = document.getElementById("inboxCloseBtn");
+        const sidebarMsgBtn = document.getElementById("messageNavBtn");
+
+        function openInbox() { inbox && inbox.classList.add("open"); }
+        function closeInbox() { inbox && inbox.classList.remove("open"); }
+
+        if (closeBtn) closeBtn.addEventListener("click", closeInbox);
+
+        // sidebar Messages link
+        if (sidebarMsgBtn) {
+          sidebarMsgBtn.addEventListener("click", function (e) { e.preventDefault(); openInbox(); });
+        }
+
+        // mobile topbar DM link
+        document.querySelectorAll(".mobile-actions a").forEach(function (a) {
+          if (a.textContent.trim() === "DM") {
+            a.addEventListener("click", function (e) { e.preventDefault(); openInbox(); });
+          }
+        });
+
+        // mobile bottom nav DM button
+        document.querySelectorAll(".mob-nav-item").forEach(function (item) {
+          if (item.getAttribute("aria-label") === "Messages") {
+            item.addEventListener("click", function (e) { e.preventDefault(); openInbox(); });
+          }
+        });
+      })();
+    </script>
+
+    <script>
+      // ===== CREATE POST MODAL =====
+      (function () {
+        const uploadCard = document.getElementById("uploadCard");
+        const createBtn  = document.getElementById("createNavBtn");
+        const closeBtn   = document.getElementById("uploadCardCloseBtn");
+        const uploadForm = document.getElementById("uploadForm");
+
+        function openCreate()  { if (uploadCard) uploadCard.hidden = false; }
+        function closeCreate() { if (uploadCard) uploadCard.hidden = true; }
+
+        if (createBtn) createBtn.addEventListener("click", function (e) { e.preventDefault(); openCreate(); });
+        if (closeBtn)  closeBtn.addEventListener("click", closeCreate);
+
+        // close on backdrop click
+        if (uploadCard) {
+          uploadCard.addEventListener("click", function (e) {
+            if (e.target === uploadCard) closeCreate();
+          });
+        }
+
+        // close after successful share
+        if (uploadForm) {
+          uploadForm.addEventListener("submit", function () {
+            setTimeout(closeCreate, 300);
+          });
+        }
+      })();
+    </script>
+
+    <script>
+      // ===== SEARCH OVERLAY =====
+      (function () {
+        const overlay     = document.getElementById("searchOverlay");
+        const input       = document.getElementById("searchInput");
+        const clearBtn    = document.getElementById("searchClearBtn");
+        const closeBtn    = document.getElementById("searchCloseBtn");
+        const resultsEl   = document.getElementById("searchResults");
+        const tabs        = document.querySelectorAll(".search-tab");
+        const searchNavBtn   = document.getElementById("searchNavBtn");
+        const mobileSearchBtn = document.getElementById("mobileSearchBtn");
+        const mobSearchNav = document.querySelector(".mob-nav-item[aria-label='Search']");
+
+        let activeTab = "people";
+
+        function openSearch() {
+          if (!overlay) return;
+          overlay.hidden = false;
+          setTimeout(function () { input && input.focus(); }, 80);
+        }
+        function closeSearch() {
+          if (!overlay) return;
+          overlay.hidden = true;
+          if (input) input.value = "";
+          if (clearBtn) clearBtn.style.display = "none";
+          renderResults("");
+        }
+
+        if (searchNavBtn) searchNavBtn.addEventListener("click", function (e) { e.preventDefault(); openSearch(); });
+        if (mobileSearchBtn) mobileSearchBtn.addEventListener("click", function (e) { e.preventDefault(); openSearch(); });
+        if (mobSearchNav) mobSearchNav.addEventListener("click", function (e) { e.preventDefault(); openSearch(); });
+        if (closeBtn) closeBtn.addEventListener("click", closeSearch);
+
+        // backdrop click
+        if (overlay) {
+          overlay.addEventListener("click", function (e) {
+            if (e.target === overlay) closeSearch();
+          });
+        }
+
+        // tab switching
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            tabs.forEach(function (t) { t.classList.remove("active"); });
+            tab.classList.add("active");
+            activeTab = tab.dataset.tab;
+            renderResults(input ? input.value.trim() : "");
+          });
+        });
+
+        // input
+        if (input) {
+          input.addEventListener("input", function () {
+            var q = input.value.trim();
+            clearBtn.style.display = q ? "flex" : "none";
+            renderResults(q);
+          });
+        }
+        if (clearBtn) {
+          clearBtn.addEventListener("click", function () {
+            input.value = "";
+            clearBtn.style.display = "none";
+            input.focus();
+            renderResults("");
+          });
+        }
+
+        // highlight helper
+        function highlight(text, q) {
+          if (!q) return escHtml(text);
+          var re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+          return escHtml(text).replace(re, '<mark class="search-highlight">$1</mark>');
+        }
+        function escHtml(s) {
+          return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+        }
+
+        function renderResults(q) {
+          if (!resultsEl) return;
+          if (!q) {
+            resultsEl.innerHTML = '<p class="search-empty">Start typing to search…</p>';
+            return;
+          }
+          var ql = q.toLowerCase();
+
+          if (activeTab === "people") renderPeople(q, ql);
+          else if (activeTab === "posts") renderPosts(q, ql);
+          else renderReels(q, ql);
+        }
+
+        function renderPeople(q, ql) {
+          // gather all known people from script.js globals (stories, suggested, contactDirectory)
+          var people = [];
+          var seen = new Set();
+          function addPerson(user, avatar, info) {
+            if (!user || seen.has(user)) return;
+            seen.add(user);
+            people.push({ user: user, avatar: avatar, info: info || "" });
+          }
+          // from window globals set by script.js
+          if (window.stories) window.stories.forEach(function (s) { addPerson(s.name, s.avatar, "Story"); });
+          if (window.suggested) window.suggested.forEach(function (s) { addPerson(s.user, s.avatar, s.info); });
+          if (window.contactDirectory) window.contactDirectory.forEach(function (c) { addPerson(c.user, c.avatar, c.status); });
+
+          var filtered = people.filter(function (p) { return p.user.toLowerCase().includes(ql); });
+          if (!filtered.length) { resultsEl.innerHTML = '<p class="search-empty">No people found for "' + escHtml(q) + '"</p>'; return; }
+
+          resultsEl.innerHTML = filtered.map(function (p) {
+            return '<div class="search-person-row" data-profile-user="' + escHtml(p.user) + '">' +
+              '<img src="' + escHtml(p.avatar) + '" alt="' + escHtml(p.user) + '" />' +
+              '<div class="search-person-info"><strong>' + highlight(p.user, q) + '</strong><span>' + escHtml(p.info) + '</span></div>' +
+              '</div>';
+          }).join("");
+
+          resultsEl.querySelectorAll(".search-person-row").forEach(function (row) {
+            row.addEventListener("click", function () {
+              var user = row.dataset.profileUser;
+              closeSearch();
+              if (user && typeof openStandardProfile === "function") {
+                setTimeout(function () { openStandardProfile(user); }, 80);
+              }
+            });
+          });
+        }
+
+        function renderPosts(q, ql) {
+          var allPosts = [];
+          if (window.posts) {
+            window.posts.forEach(function (p, i) {
+              allPosts.push({ user: p.user, caption: p.caption, photo: p.photo, index: i });
+            });
+          }
+          // also stored posts from localStorage
+          try {
+            var stored = JSON.parse(localStorage.getItem("epiton_user_posts") || "[]");
+            stored.forEach(function (p) {
+              allPosts.push({ user: p.handle || p.user, caption: p.caption, photo: p.dataUrl || "", index: -1 });
+            });
+          } catch(e) {}
+
+          var filtered = allPosts.filter(function (p) {
+            return (p.user && p.user.toLowerCase().includes(ql)) ||
+                   (p.caption && p.caption.toLowerCase().includes(ql));
+          });
+
+          if (!filtered.length) { resultsEl.innerHTML = '<p class="search-empty">No posts found for "' + escHtml(q) + '"</p>'; return; }
+
+          resultsEl.innerHTML = filtered.map(function (p) {
+            var thumb = p.photo
+              ? '<img class="search-post-thumb" src="' + escHtml(p.photo) + '" alt="" />'
+              : '<div class="search-post-thumb-placeholder">🖼️</div>';
+            return '<div class="search-post-row">' + thumb +
+              '<div class="search-post-info"><strong>' + highlight(p.user, q) + '</strong>' +
+              '<span>' + highlight(p.caption || "No caption", q) + '</span></div></div>';
+          }).join("");
+        }
+
+        function renderReels(q, ql) {
+          var allReels = [];
+          if (window.defaultReels) window.defaultReels.forEach(function (r) { allReels.push(r); });
+          try {
+            var stored = JSON.parse(localStorage.getItem("epiton_reels_data") || "[]");
+            stored.forEach(function (r) { allReels.push(r); });
+          } catch(e) {}
+
+          var filtered = allReels.filter(function (r) {
+            return (r.user && r.user.toLowerCase().includes(ql)) ||
+                   (r.caption && r.caption.toLowerCase().includes(ql));
+          });
+
+          if (!filtered.length) { resultsEl.innerHTML = '<p class="search-empty">No reels found for "' + escHtml(q) + '"</p>'; return; }
+
+          resultsEl.innerHTML = filtered.map(function (r) {
+            return '<div class="search-reel-row">' +
+              '<div class="search-reel-thumb">🎬</div>' +
+              '<div class="search-reel-info"><strong>' + highlight(r.user, q) + '</strong>' +
+              '<span>' + highlight(r.caption || "", q) + '</span></div></div>';
+          }).join("");
+        }
+
+        renderResults("");
+      })();
+    </script>
+
+    <script>
+      // ===== IMAGE UPLOAD WITH PREVIEW + PERSISTENCE + INTERACTIVE =====
+      (function () {
+        const POSTS_STORAGE_KEY = "epiton_user_posts";
+
+        const dropZone = document.getElementById("dropZone");
+        const dropZoneInner = document.getElementById("dropZoneInner");
+        const imageInput = document.getElementById("imageInput");
+        const imagePreviewWrap = document.getElementById("imagePreviewWrap");
+        const imagePreview = document.getElementById("imagePreview");
+        const removeImageBtn = document.getElementById("removeImageBtn");
+        const fileNameEl = document.getElementById("fileName");
+        const captionInput = document.getElementById("captionInput");
+        const uploadForm = document.getElementById("uploadForm");
+        const postsSection = document.getElementById("posts");
+
+        let currentDataUrl = null;
+        let currentFileName = null;
+
+        // ---- preview helpers ----
+        function showPreview(file) {
+          if (!file || !file.type.startsWith("image/")) return;
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            currentDataUrl = e.target.result;
+            currentFileName = file.name;
+            imagePreview.src = currentDataUrl;
+            imagePreviewWrap.style.display = "block";
+            dropZoneInner.style.display = "none";
+            fileNameEl.textContent = file.name;
+          };
+          reader.readAsDataURL(file);
+        }
+
+        function clearPreview() {
+          currentDataUrl = null;
+          currentFileName = null;
+          imagePreview.src = "";
+          imagePreviewWrap.style.display = "none";
+          dropZoneInner.style.display = "flex";
+          fileNameEl.textContent = "";
+          imageInput.value = "";
+        }
+
+        // ---- storage ----
+        function loadStoredPosts() {
+          try {
+            return JSON.parse(localStorage.getItem(POSTS_STORAGE_KEY) || "[]");
+          } catch { return []; }
+        }
+
+        function savePost(post) {
+          const stored = loadStoredPosts();
+          stored.unshift(post);
+          try {
+            localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(stored));
+          } catch (e) {
+            // storage quota — trim oldest
+            stored.pop();
+            localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(stored));
+          }
+          // Mirror to per-user key so other accounts can see this post
+          try {
+            const session = JSON.parse(localStorage.getItem("epiton_active_session") || "null");
+            if (session && session.username) {
+              const perUserKey = "epiton_u_" + session.username.toLowerCase() + "_posts";
+              localStorage.setItem(perUserKey, JSON.stringify(stored));
+            }
+          } catch (e) { /* quota or no session */ }
+        }
+
+        // ---- helpers ----
+        function escapeStr(str) {
+          return String(str || "")
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function formatTimeAgo(iso) {
+          if (!iso) return "Just now";
+          const diff = Math.floor((Date.now() - new Date(iso)) / 1000);
+          if (diff < 60) return "Just now";
+          if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+          if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+          return Math.floor(diff / 86400) + "d ago";
+        }
+
+        function showBanner(msg) {
+          const t = document.createElement("div");
+          t.className = "toast toast-success";
+          t.textContent = msg;
+          const container = document.getElementById("toastContainer");
+          if (container) {
+            container.appendChild(t);
+            setTimeout(() => { t.classList.add("fade-out"); }, 2000);
+            setTimeout(() => { t.remove(); }, 2600);
+          }
+        }
+
+        // ---- render a single uploaded post card ----
+        function createPostCard(post) {
+          const card = document.createElement("article");
+          card.className = "post-card uploaded-post";
+          card.dataset.postId = post.id;
+
+          const likeCount = post.likes || 0;
+          const comments = post.comments || [];
+          const liked = post.likedByMe || false;
+
+          card.innerHTML = `
+            <div class="post-header">
+              <img src="${post.avatar}" alt="${post.handle}" />
+              <div class="post-header-info">
+                <strong>${post.handle}</strong>
+                <span>${formatTimeAgo(post.createdAt)}</span>
+              </div>
+              <button class="delete-post-btn" data-id="${post.id}" title="Delete post" aria-label="Delete post">✕</button>
+            </div>
+            <img class="post-image" src="${post.dataUrl}" alt="${post.caption || 'Uploaded post'}" loading="lazy" />
+            <div class="post-actions">
+              <button class="up-like-btn${liked ? " liked" : ""}" data-id="${post.id}" aria-label="Like" aria-pressed="${liked}">
+                ${liked ? "❤️" : "🤍"}
+              </button>
+              <button class="up-comment-toggle" data-id="${post.id}" aria-label="Comment">💬</button>
+              <button class="up-share-btn" data-id="${post.id}" aria-label="Share">📤</button>
+              <button class="post-save" aria-label="Save">🔖</button>
+            </div>
+            <p class="post-likes up-like-count" data-id="${post.id}">${likeCount === 1 ? "1 like" : likeCount + " likes"}</p>
+            ${post.caption ? `<p class="post-caption"><strong>${post.handle}</strong> ${post.caption}</p>` : ""}
+            <div class="up-comments-section" id="comments-${post.id}" style="display:none;">
+              <div class="up-comment-list" id="comment-list-${post.id}">
+                ${comments.length === 0
+                  ? '<p class="comment-empty">No comments yet.</p>'
+                  : comments.map(c => `<p class="comment-item"><b>${escapeStr(c.user)}</b> ${escapeStr(c.text)}</p>`).join("")}
+              </div>
+              <form class="post-comment-form up-comment-form" data-id="${post.id}">
+                <input type="text" placeholder="Add a comment…" maxlength="220" aria-label="Add a comment" />
+                <button type="submit">Post</button>
+              </form>
+            </div>
+          `;
+
+          // ---- like ----
+          card.querySelector(".up-like-btn").addEventListener("click", function () {
+            const stored = loadStoredPosts();
+            const p = stored.find(x => x.id === post.id);
+            if (!p) return;
+            p.likedByMe = !p.likedByMe;
+            p.likes = Math.max(0, (p.likes || 0) + (p.likedByMe ? 1 : -1));
+            localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(stored));
+            this.textContent = p.likedByMe ? "❤️" : "🤍";
+            this.classList.toggle("liked", p.likedByMe);
+            this.setAttribute("aria-pressed", p.likedByMe);
+            card.querySelector(`.up-like-count[data-id="${post.id}"]`).textContent =
+              p.likes === 1 ? "1 like" : p.likes + " likes";
+          });
+
+          // ---- toggle comments ----
+          card.querySelector(".up-comment-toggle").addEventListener("click", function () {
+            const section = card.querySelector(`#comments-${post.id}`);
+            const open = section.style.display === "none";
+            section.style.display = open ? "block" : "none";
+            this.style.opacity = open ? "1" : "0.5";
+          });
+
+          // ---- submit comment ----
+          card.querySelector(".up-comment-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const input = this.querySelector("input");
+            const text = input.value.trim();
+            if (!text) return;
+            const handle = document.getElementById("homeProfileHandle")?.textContent || "you";
+            const stored = loadStoredPosts();
+            const p = stored.find(x => x.id === post.id);
+            if (!p) return;
+            if (!Array.isArray(p.comments)) p.comments = [];
+            p.comments.push({ user: handle, text });
+            localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(stored));
+            const list = card.querySelector(`#comment-list-${post.id}`);
+            const empty = list.querySelector(".comment-empty");
+            if (empty) empty.remove();
+            const item = document.createElement("p");
+            item.className = "comment-item";
+            item.innerHTML = `<b>${escapeStr(handle)}</b> ${escapeStr(text)}`;
+            list.appendChild(item);
+            input.value = "";
+            list.scrollTop = list.scrollHeight;
+          });
+
+          // ---- share ----
+          card.querySelector(".up-share-btn").addEventListener("click", function () {
+            const url = window.location.href.split("?")[0] + "?post=" + post.id;
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(url).then(() => showBanner("Link copied!"));
+            } else {
+              window.prompt("Copy link:", url);
+            }
+          });
+
+          // ---- delete ----
+          card.querySelector(".delete-post-btn").addEventListener("click", () => {
+            if (!confirm("Delete this post?")) return;
+            card.remove();
+            const stored = loadStoredPosts().filter(p => p.id !== post.id);
+            localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(stored));
+            // Keep per-user key in sync
+            try {
+              const session = JSON.parse(localStorage.getItem("epiton_active_session") || "null");
+              if (session && session.username) {
+                const perUserKey = "epiton_u_" + session.username.toLowerCase() + "_posts";
+                localStorage.setItem(perUserKey, JSON.stringify(stored));
+              }
+            } catch (e) { /* skip */ }
+          });
+
+          return card;
+        }
+
+        function renderStoredPosts() {
+          const stored = loadStoredPosts();
+          stored.forEach(post => {
+            const card = createPostCard(post);
+            postsSection.insertBefore(card, postsSection.firstChild);
+          });
+        }
+
+        // ---- form submit ----
+        uploadForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!currentDataUrl) {
+            fileNameEl.textContent = "Please select an image first.";
+            fileNameEl.style.color = "var(--danger)";
+            return;
+          }
+          fileNameEl.style.color = "";
+
+          // get profile info from the page if available
+          const handle = document.getElementById("homeProfileHandle")?.textContent || "your_handle";
+          const avatar = document.getElementById("homeProfileImage")?.src || "https://randomuser.me/api/portraits/men/85.jpg";
+
+          const post = {
+            id: `up_${Date.now()}`,
+            handle,
+            avatar,
+            dataUrl: currentDataUrl,
+            caption: captionInput.value.trim(),
+            createdAt: new Date().toISOString(),
+            likes: 0,
+            likedByMe: false,
+            comments: []
+          };
+
+          savePost(post);
+          const card = createPostCard(post);
+          postsSection.insertBefore(card, postsSection.firstChild);
+
+          captionInput.value = "";
+          clearPreview();
+        });
+
+        // ---- drag & drop ----
+        dropZone.addEventListener("click", function (e) {
+          if (e.target === removeImageBtn) return;
+          imageInput.click();
+        });
+
+        imageInput.addEventListener("change", function () {
+          if (this.files && this.files[0]) showPreview(this.files[0]);
+        });
+
+        removeImageBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          clearPreview();
+        });
+
+        dropZone.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          dropZone.classList.add("drag-over");
+        });
+        dropZone.addEventListener("dragleave", function () {
+          dropZone.classList.remove("drag-over");
+        });
+        dropZone.addEventListener("drop", function (e) {
+          e.preventDefault();
+          dropZone.classList.remove("drag-over");
+          const file = e.dataTransfer.files[0];
+          if (file) {
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            imageInput.files = dt.files;
+            showPreview(file);
+          }
+        });
+
+        // ---- load persisted posts on startup ----
+        renderStoredPosts();
+      })();
+    </script>
+    <script>
+      // ===== PROFILE EDITOR OPEN/CLOSE + EMOJI PICKER =====
+      (function () {
+        const overlay = document.getElementById("profileEditor");
+        const closeBtn = document.getElementById("profileEditorCloseBtn");
+        const editBtn = document.getElementById("editProfileBtn");
+        const profileNavBtn = document.getElementById("profileNavBtn");
+        const emojiTrigger = document.getElementById("emojiTriggerBtn");
+        const emojiPanel = document.getElementById("emojiPanel");
+        const bioInput = document.getElementById("profileBioInput");
+
+        function openEditor() {
+          if (overlay) { overlay.hidden = false; overlay.scrollIntoView && overlay.scrollIntoView({ behavior: "smooth", block: "start" }); }
+        }
+        function closeEditor() {
+          if (overlay) overlay.hidden = true;
+          if (emojiPanel) emojiPanel.classList.remove("open");
+        }
+
+        if (editBtn) editBtn.addEventListener("click", openEditor);
+        if (profileNavBtn) profileNavBtn.addEventListener("click", function(e) { e.preventDefault(); openEditor(); });
+        if (closeBtn) closeBtn.addEventListener("click", closeEditor);
+
+        // ---- Create nav button → show upload card ----
+        var createNavBtn = document.getElementById("createNavBtn");
+        var uploadCard   = document.getElementById("uploadCard");
+        var uploadCardCloseBtn = document.getElementById("uploadCardCloseBtn");
+        if (createNavBtn && uploadCard) {
+          createNavBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            uploadCard.hidden = false;
+            uploadCard.scrollIntoView({ behavior: "smooth", block: "center" });
+          });
+        }
+        if (uploadCardCloseBtn && uploadCard) {
+          uploadCardCloseBtn.addEventListener("click", function() {
+            uploadCard.hidden = true;
+          });
+        }
+
+        // mobile profile nav tab
+        document.querySelectorAll(".mob-nav-item").forEach(function(item) {
+          if (item.getAttribute("aria-label") === "Profile") {
+            item.addEventListener("click", function(e) { e.preventDefault(); openEditor(); });
+          }
+        });
+
+        // emoji picker
+        if (emojiTrigger && emojiPanel && bioInput) {
+          emojiTrigger.addEventListener("click", function(e) {
+            e.stopPropagation();
+            emojiPanel.classList.toggle("open");
+          });
+          emojiPanel.addEventListener("click", function(e) {
+            const emoji = e.target.textContent;
+            if (!emoji || e.target === emojiPanel) return;
+            const start = bioInput.selectionStart;
+            const end = bioInput.selectionEnd;
+            bioInput.value = bioInput.value.slice(0, start) + emoji + bioInput.value.slice(end);
+            bioInput.selectionStart = bioInput.selectionEnd = start + emoji.length;
+            bioInput.focus();
+            emojiPanel.classList.remove("open");
+          });
+          document.addEventListener("click", function(e) {
+            if (!emojiPanel.contains(e.target) && e.target !== emojiTrigger) {
+              emojiPanel.classList.remove("open");
+            }
+          });
+        }
+      })();
+    </script>
+    <script>
+      // ===== REELS PAGE — close button + mobile nav + click-to-play + drop zone =====
+      (function () {
+        var reelsPage        = document.getElementById("reelsPage");
+        var uploadPanel      = document.getElementById("reelsUploadPanel");
+        var reelsClose       = document.getElementById("reelsCloseBtn");
+        var reelsMobileClose = document.getElementById("reelsMobileCloseBtn");
+        var reelsCloseDesktop = document.getElementById("reelsCloseBtnDesktop");
+        var reelsUploadFab   = document.getElementById("reelsUploadBtn");
+        var mobReelsNav      = document.querySelector(".mob-nav-item[aria-label='Reels']");
+        var reelDropZone     = document.getElementById("reelDropZone");
+        var reelVideoInput   = document.getElementById("reelVideoInput");
+
+        function openReels() {
+          if (!reelsPage) return;
+          reelsPage.hidden = false;
+          var first = reelsPage.querySelector(".reel-video");
+          if (first) { first.muted = true; first.play().catch(function(){}); }
+        }
+        function closeReels() {
+          if (!reelsPage) return;
+          reelsPage.hidden = true;
+          reelsPage.querySelectorAll(".reel-video").forEach(function(v){ v.pause(); });
+        }
+        function openUploadPanel() {
+          if (uploadPanel) uploadPanel.hidden = false;
+        }
+        function closeUploadPanel() {
+          if (uploadPanel) uploadPanel.hidden = true;
+        }
+
+        if (reelsClose)        reelsClose.addEventListener("click", closeUploadPanel);
+        if (reelsMobileClose)  reelsMobileClose.addEventListener("click", closeReels);
+        if (reelsCloseDesktop) reelsCloseDesktop.addEventListener("click", closeReels);
+        if (reelsUploadFab)    reelsUploadFab.addEventListener("click", openUploadPanel);
+        if (mobReelsNav)       mobReelsNav.addEventListener("click", function(e){ e.preventDefault(); openReels(); });
+
+        // close upload panel when clicking the backdrop
+        if (uploadPanel) {
+          uploadPanel.addEventListener("click", function(e) {
+            if (e.target === uploadPanel) closeUploadPanel();
+          });
+        }
+
+        // click-to-play/pause on reel video
+        var feed = document.getElementById("reelsFeed");
+        if (feed) {
+          feed.addEventListener("click", function(e) {
+            var video = e.target.closest(".reel-video");
+            if (!video) return;
+            if (video.paused) { video.play().catch(function(){}); }
+            else { video.pause(); }
+          });
+        }
+
+        // reel drop zone drag-drop
+        if (reelDropZone && reelVideoInput) {
+          reelDropZone.addEventListener("click", function(e) {
+            if (e.target.tagName !== "LABEL" && e.target.tagName !== "INPUT") {
+              reelVideoInput.click();
+            }
+          });
+          reelDropZone.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            reelDropZone.classList.add("drag-over");
+          });
+          reelDropZone.addEventListener("dragleave", function() {
+            reelDropZone.classList.remove("drag-over");
+          });
+          reelDropZone.addEventListener("drop", function(e) {
+            e.preventDefault();
+            reelDropZone.classList.remove("drag-over");
+            if (e.dataTransfer.files.length) {
+              var dt = new DataTransfer();
+              Array.from(e.dataTransfer.files).forEach(function(f){ dt.items.add(f); });
+              reelVideoInput.files = dt.files;
+            }
+          });
+        }
+      })();
+    </script>
+    <script>
+      // ===== SNAPS =====
+      (function () {
+        const SNAPS_KEY = "epiton_snaps_data";
+        const SNAP_TTL  = 24 * 60 * 60 * 1000;
+
+        const page           = document.getElementById("snapsPage");
+        const closeBtn       = document.getElementById("snapsCloseBtn");
+        const feed           = document.getElementById("snapsFeed");
+        const navBtn         = document.getElementById("snapsNavBtn");
+        const mobNavBtn      = document.getElementById("mobSnapsNav");
+        const fabBtn         = document.getElementById("snapsAddBtn");
+        const uploadPanel    = document.getElementById("snapsUploadPanel");
+        const uploadCloseBtn = document.getElementById("snapsUploadCloseBtn");
+        const dropZone       = document.getElementById("snapsDropZone");
+        const fileInput      = document.getElementById("snapsFileInput");
+        const captionInput   = document.getElementById("snapsCaptionInput");
+        const shareBtn       = document.getElementById("snapsShareBtn");
+        const previewWrap    = document.getElementById("snapsPreviewWrap");
+        const cameraBtn      = document.getElementById("snapsCameraBtn");
+        const cameraModal    = document.getElementById("snapsCameraModal");
+        const cameraAllowBtn = document.getElementById("snapsCameraAllowBtn");
+        const cameraDenyBtn  = document.getElementById("snapsCameraDenyBtn");
+        const cameraPreview  = document.getElementById("snapsCameraPreview");
+        const cameraCanvas   = document.getElementById("snapsCameraCanvas");
+        const cameraControls = document.getElementById("snapsCameraControls");
+        const captureBtn     = document.getElementById("snapsCaptureBtn");
+        const cameraStopBtn  = document.getElementById("snapsCameraStopBtn");
+
+        let currentDataUrl = null;
+        let currentType    = "image";
+        let cameraStream   = null;
+
+        function openSnaps()  { if (page) { page.hidden = false; page.setAttribute("aria-hidden","false"); renderFeed(); } }
+        function closeSnaps() {
+          if (page) { page.hidden = true; page.setAttribute("aria-hidden","true"); }
+          stopCamera();
+          closeUploadPanel();
+        }
+        function openUploadPanel()  { if (uploadPanel) { uploadPanel.hidden = false; uploadPanel.classList.add("open"); } }
+        function closeUploadPanel() { if (uploadPanel) { uploadPanel.hidden = true; uploadPanel.classList.remove("open"); } resetUpload(); }
+
+        function resetUpload() {
+          currentDataUrl = null; currentType = "image";
+          if (shareBtn) shareBtn.disabled = true;
+          if (captionInput) captionInput.value = "";
+          if (fileInput) fileInput.value = "";
+          if (previewWrap) { previewWrap.hidden = true; previewWrap.innerHTML = ""; }
+          if (dropZone) dropZone.style.display = "";
+        }
+
+        if (navBtn)         navBtn.addEventListener("click",    function(e){ e.preventDefault(); openSnaps(); });
+        if (mobNavBtn)      mobNavBtn.addEventListener("click", function(e){ e.preventDefault(); openSnaps(); });
+        if (closeBtn)       closeBtn.addEventListener("click",  closeSnaps);
+        if (fabBtn)         fabBtn.addEventListener("click",    openUploadPanel);
+        if (uploadCloseBtn) uploadCloseBtn.addEventListener("click", closeUploadPanel);
+
+        // ---- file pick ----
+        if (fileInput) fileInput.addEventListener("change", function() {
+          const file = fileInput.files[0]; if (!file) return;
+          currentType = file.type.startsWith("video") ? "video" : "image";
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            currentDataUrl = ev.target.result;
+            shareBtn.disabled = false;
+            showPreview(currentDataUrl, currentType);
+          };
+          reader.readAsDataURL(file);
+        });
+
+        if (dropZone) dropZone.addEventListener("click", function(e) {
+          if (e.target.tagName !== "LABEL" && e.target.tagName !== "INPUT") fileInput.click();
+        });
+
+        function showPreview(dataUrl, type) {
+          if (!previewWrap) return;
+          previewWrap.hidden = false;
+          previewWrap.innerHTML = type === "video"
+            ? `<video src="${dataUrl}" class="snaps-preview-media" muted playsinline autoplay loop></video>`
+            : `<img src="${dataUrl}" class="snaps-preview-media" alt="Preview" />`;
+          if (dropZone) dropZone.style.display = "none";
+        }
+
+        // ---- camera ----
+        if (cameraBtn) cameraBtn.addEventListener("click", function() {
+          if (cameraModal) cameraModal.hidden = false;
+        });
+        if (cameraDenyBtn) cameraDenyBtn.addEventListener("click", function() {
+          if (cameraModal) cameraModal.hidden = true;
+        });
+        if (cameraAllowBtn) cameraAllowBtn.addEventListener("click", function() {
+          if (cameraModal) cameraModal.hidden = true;
+          openUploadPanel();
+          startCamera();
+        });
+
+        function startCamera() {
+          navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+            .then(function(stream) {
+              cameraStream = stream;
+              cameraPreview.srcObject = stream;
+              cameraPreview.hidden = false;
+              cameraControls.hidden = false;
+              if (dropZone) dropZone.style.display = "none";
+            })
+            .catch(function() {
+              alert("Camera access denied or unavailable.");
+            });
+        }
+
+        function stopCamera() {
+          if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+          if (cameraPreview) { cameraPreview.hidden = true; cameraPreview.srcObject = null; }
+          if (cameraControls) cameraControls.hidden = true;
+        }
+
+        if (captureBtn) captureBtn.addEventListener("click", function() {
+          if (!cameraStream) return;
+          cameraCanvas.width  = cameraPreview.videoWidth;
+          cameraCanvas.height = cameraPreview.videoHeight;
+          cameraCanvas.getContext("2d").drawImage(cameraPreview, 0, 0);
+          currentDataUrl = cameraCanvas.toDataURL("image/jpeg", 0.92);
+          currentType = "image";
+          shareBtn.disabled = false;
+          stopCamera();
+          showPreview(currentDataUrl, "image");
+        });
+
+        if (cameraStopBtn) cameraStopBtn.addEventListener("click", function() {
+          stopCamera();
+          if (dropZone) dropZone.style.display = "";
+        });
+
+        // ---- send snap ----
+        if (shareBtn) shareBtn.addEventListener("click", function() {
+          if (!currentDataUrl) return;
+          const session = JSON.parse(localStorage.getItem("epiton_active_session") || "null");
+          const handle  = session ? session.username : "you";
+          const prof    = JSON.parse(localStorage.getItem("epiton_profile_data") || "null");
+          const avatar  = prof && prof.image ? prof.image : "https://randomuser.me/api/portraits/men/85.jpg";
+          const snap = { id: "snap_" + Date.now(), handle, avatar, dataUrl: currentDataUrl, type: currentType, caption: captionInput.value.trim(), createdAt: Date.now() };
+          const stored = loadSnaps(); stored.unshift(snap);
+          try { localStorage.setItem(SNAPS_KEY, JSON.stringify(stored)); } catch(e) {}
+          closeUploadPanel();
+          renderFeed();
+        });
+
+        function loadSnaps() {
+          try {
+            const raw = JSON.parse(localStorage.getItem(SNAPS_KEY) || "[]");
+            const fresh = raw.filter(s => Date.now() - s.createdAt < SNAP_TTL);
+            if (fresh.length !== raw.length) localStorage.setItem(SNAPS_KEY, JSON.stringify(fresh));
+            return fresh;
+          } catch { return []; }
+        }
+
+        function timeLeft(createdAt) {
+          const ms = SNAP_TTL - (Date.now() - createdAt);
+          if (ms <= 0) return "Expired";
+          const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000);
+          return h > 0 ? `${h}h ${m}m left` : `${m}m left`;
+        }
+
+        function renderFeed() {
+          if (!feed) return;
+          const snaps = loadSnaps();
+          if (!snaps.length) { feed.innerHTML = '<p class="snaps-empty">No snaps yet. Hit ＋ to send one ⚡</p>'; return; }
+          feed.innerHTML = "";
+          snaps.forEach(function(snap) {
+            const card = document.createElement("div");
+            card.className = "snap-card";
+            const media = snap.type === "video"
+              ? `<video class="snap-media" src="${snap.dataUrl}" muted playsinline loop></video>`
+              : `<img class="snap-media" src="${snap.dataUrl}" alt="${snap.caption || 'Snap'}" />`;
+            card.innerHTML = `
+              <div class="snap-media-wrap">${media}</div>
+              <div class="snap-info">
+                <img src="${snap.avatar}" class="snap-avatar" alt="${snap.handle}" />
+                <div class="snap-meta">
+                  <strong>@${snap.handle}</strong>
+                  ${snap.caption ? `<p class="snap-caption">${snap.caption}</p>` : ""}
+                  <span class="snap-ttl">⏱ ${timeLeft(snap.createdAt)}</span>
+                </div>
+                <button class="snap-delete-btn icon-btn" data-id="${snap.id}" aria-label="Delete">🗑</button>
+              </div>`;
+            card.querySelector(".snap-delete-btn").addEventListener("click", function() {
+              const s = loadSnaps().filter(x => x.id !== snap.id);
+              try { localStorage.setItem(SNAPS_KEY, JSON.stringify(s)); } catch(e) {}
+              renderFeed();
+            });
+            const vid = card.querySelector("video");
+            if (vid) vid.addEventListener("click", function() { vid.paused ? vid.play() : vid.pause(); });
+            feed.appendChild(card);
+          });
+        }
+
+        renderFeed();
+      })();
+    </script>
+
+    <script>
+      // ===== CHAT MEDIA ATTACHMENTS =====
+      (function () {
+        const mediaInput = document.getElementById("chatMediaInput");
+        const chatForm   = document.getElementById("chatForm");
+        const chatInput  = document.getElementById("chatInput");
+
+        if (!mediaInput || !chatForm) return;
+
+        mediaInput.addEventListener("change", function() {
+          const file = mediaInput.files[0];
+          if (!file) return;
+          const isVideo = file.type.startsWith("video");
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const dataUrl = ev.target.result;
+            // inject as a special message via the global conversations + renderChatPanel
+            if (typeof conversations === "undefined" || typeof activeConversationId === "undefined") return;
+            const conv = conversations.find(c => c.id === activeConversationId);
+            if (!conv) return;
+            const mediaTag = isVideo
+              ? `[video:${dataUrl}]`
+              : `[image:${dataUrl}]`;
+            conv.messages.push({ from: "you", text: mediaTag });
+            if (typeof saveConversations === "function") saveConversations();
+            if (typeof renderChatPanel === "function") renderChatPanel();
+            mediaInput.value = "";
+          };
+          reader.readAsDataURL(file);
+        });
+      })();
+    </script>
+  </body>
+</html>
