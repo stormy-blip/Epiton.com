@@ -32,6 +32,7 @@
           <a class="menu-item" id="snapsNavBtn" href="#">Snaps</a>
           <a class="menu-item" id="messageNavBtn" href="#">DM</a>
           <a class="menu-item" id="notificationsNavBtn" href="#">Notifications <span id="notifNavBadge" class="notif-nav-badge" style="display:none;"></span></a>
+          <a class="menu-item" id="peopleNavBtn" href="#">👥 People</a>
           <a class="menu-item" id="createNavBtn" href="#">Create</a>
           <a class="menu-item" id="profileNavBtn" href="#">Profile</a>
         </nav>
@@ -140,6 +141,7 @@
       <aside class="inbox-sidebar">
         <div class="inbox-sidebar-header">
           <h2>Messages <span id="unreadCount" class="unread-total"></span></h2>
+          <button id="dmPeopleBtn" class="icon-btn" title="Find people" aria-label="Find people">👥</button>
           <button id="newThreadBtn" class="icon-btn new-msg-btn" title="New message" aria-label="New message">✏️</button>
           <button class="inbox-close-btn icon-btn" id="inboxCloseBtn" aria-label="Close messages">✕</button>
         </div>
@@ -290,29 +292,56 @@
       </div>
     </div>
 
+    <!-- ===== PEOPLE PAGE ===== -->
+    <div id="peoplePage" class="people-page" hidden aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="people-page-inner">
+        <div class="people-page-header">
+          <h2>👥 People</h2>
+          <button id="peoplePageClose" class="icon-btn" aria-label="Close">✕</button>
+        </div>
+        <div class="people-search-wrap">
+          <span class="search-icon">🔍</span>
+          <input id="peopleSearchInput" type="search" placeholder="Search people…" autocomplete="off" aria-label="Search people" />
+        </div>
+        <div id="peopleList" class="people-list">
+          <div class="people-loading">Loading people…</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Mobile Bottom Nav -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav">
-      <a class="mob-nav-item active" href="#" aria-label="Home">
+      <a class="mob-nav-item active" data-nav="home" href="#" aria-label="Home">
         <span class="mob-nav-icon">🏠</span>
         <span class="mob-nav-label">Home</span>
       </a>
-      <a class="mob-nav-item" href="#" aria-label="Search">
+      <a class="mob-nav-item" data-nav="search" href="#" aria-label="Search">
         <span class="mob-nav-icon">🔍</span>
         <span class="mob-nav-label">Search</span>
       </a>
-      <a class="mob-nav-item" href="#" aria-label="Reels">
+      <a class="mob-nav-item" data-nav="reels" href="#" aria-label="Reels">
         <span class="mob-nav-icon">🎬</span>
         <span class="mob-nav-label">Reels</span>
       </a>
-      <a class="mob-nav-item" href="#" aria-label="Snaps" id="mobSnapsNav">
+      <a class="mob-nav-item" data-nav="snaps" href="#" aria-label="Snaps" id="mobSnapsNav">
         <span class="mob-nav-icon">⚡</span>
         <span class="mob-nav-label">Snaps</span>
       </a>
-      <a class="mob-nav-item" href="#" aria-label="Messages">
+      <a class="mob-nav-item" data-nav="dm" href="#" aria-label="Messages">
         <span class="mob-nav-icon">💬</span>
         <span class="mob-nav-label">DM</span>
+        <span id="mobDmBadge" class="mob-nav-badge" style="display:none;"></span>
       </a>
-      <a class="mob-nav-item" href="#" aria-label="Profile" id="mobProfileNav">
+      <a class="mob-nav-item" data-nav="notifications" href="#" aria-label="Notifications">
+        <span class="mob-nav-icon">🔔</span>
+        <span class="mob-nav-label">Alerts</span>
+        <span id="mobNotifBadge" class="mob-nav-badge" style="display:none;"></span>
+      </a>
+      <a class="mob-nav-item" data-nav="people" href="#" aria-label="People">
+        <span class="mob-nav-icon">👥</span>
+        <span class="mob-nav-label">People</span>
+      </a>
+      <a class="mob-nav-item" data-nav="profile" href="#" aria-label="Profile" id="mobProfileNav">
         <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Profile" class="mob-nav-avatar" />
         <span class="mob-nav-label">Profile</span>
       </a>
@@ -477,9 +506,10 @@
         <div class="my-profile-tabs" role="tablist">
           <button class="my-profile-tab active" data-tab="posts" role="tab">📷 Posts</button>
           <button class="my-profile-tab" data-tab="reels" role="tab">🎬 Reels</button>
-          <button class="my-profile-tab" data-tab="liked-posts" role="tab">❤️ Liked Posts</button>
-          <button class="my-profile-tab" data-tab="liked-reels" role="tab">❤️ Liked Reels</button>
-          <button class="my-profile-tab" data-tab="following" role="tab">👥 Following</button>
+          <button class="my-profile-tab" data-tab="liked-posts" role="tab">❤️ Liked</button>
+          <button class="my-profile-tab" data-tab="followers" role="tab">👥 Followers</button>
+          <button class="my-profile-tab" data-tab="following" role="tab">➡️ Following</button>
+          <button class="my-profile-tab" data-tab="friends" role="tab">🤝 Friends</button>
         </div>
 
         <!-- Tab content -->
@@ -492,31 +522,32 @@
 
     <!-- Theme Studio Panel -->
     <div id="themeStudio" class="theme-studio" role="dialog" aria-label="Theme selector">
+      <div class="studio-drag-handle"></div>
       <div class="studio-header">
         <span class="studio-icon">✦</span>
         <span class="studio-title">Appearance</span>
-        <span class="studio-icon">✦</span>
+        <button class="studio-close-btn" id="themeStudioClose" aria-label="Close">✕</button>
       </div>
-      <div class="studio-divider"></div>
-      <p class="studio-section-label">Color Theme</p>
-      <button class="theme-scroll-btn" id="themeScrollUp" aria-label="Scroll up">▲</button>
-      <div id="themeSwitches" class="theme-switches-scroll"></div>
-      <button class="theme-scroll-btn" id="themeScrollDown" aria-label="Scroll down">▼</button>
-      <div class="studio-divider"></div>
-      <p class="studio-section-label">🌑 Dark Backgrounds</p>
-      <div id="bgSwitches" class="bg-switches">
-        <button class="bg-btn" data-bg="embers">🔥 Embers</button>
-        <button class="bg-btn" data-bg="nebula">� Nebula</button>
-        <button class="bg-btn" data-bg="matrix">💻 Matrix</button>
-        <button class="bg-btn" data-bg="starfield">⭐ Starfield</button>
-        <p class="studio-section-label" style="margin-top:6px;">☀️ Light Backgrounds</p>
-        <button class="bg-btn" data-bg="petals">🌸 Petals</button>
-        <button class="bg-btn" data-bg="bubbles">🫧 Bubbles</button>
-        <button class="bg-btn" data-bg="confetti">🎊 Confetti</button>
-        <button class="bg-btn" data-bg="lavalamp">🫧 Lava Lamp</button>
-        <p class="studio-section-label" style="margin-top:6px;">✦ Floating</p>
-        <button class="bg-btn" data-bg="auroradrift">🌠 Aurora Drift</button>
-        <button class="bg-btn active" data-bg="none">✕ None</button>
+      <div class="studio-body">
+        <p class="studio-section-label">Color Theme</p>
+        <div id="themeSwitches" class="theme-switches-grid"></div>
+        <div class="studio-divider"></div>
+        <p class="studio-section-label">Animated Background</p>
+        <div id="bgSwitches" class="bg-switches-row">
+          <button class="bg-chip active" data-bg="none">✕ None</button>
+          <button class="bg-chip" data-bg="epiton">✦ Epiton</button>
+          <button class="bg-chip" data-bg="pulsewave">� Pulse Wave</button>
+          <button class="bg-chip" data-bg="neonrain">⚡ Neon Rain</button>
+          <button class="bg-chip" data-bg="galaxy">� Galaxy</button>
+          <button class="bg-chip" data-bg="lightning">🌩 Lightning</button>
+          <button class="bg-chip" data-bg="ocean">🌊 Ocean</button>
+          <button class="bg-chip" data-bg="fireflies">✨ Fireflies</button>
+          <button class="bg-chip" data-bg="geopulse">🔷 Geo Pulse</button>
+          <button class="bg-chip" data-bg="inkdrop">🖤 Ink Drop</button>
+          <button class="bg-chip" data-bg="cybergrid">🟦 Cyber Grid</button>
+          <button class="bg-chip" data-bg="snow">❄️ Snow</button>
+          <button class="bg-chip" data-bg="vortex">🌪 Vortex</button>
+        </div>
       </div>
     </div>
 
@@ -554,19 +585,18 @@
           <p class="auth-tagline">Sign in to continue</p>
           <form id="authLoginForm" class="auth-form" novalidate>
             <label class="auth-label">
-              <span>Username</span>
-              <input id="authUsernameInput" type="text" placeholder="your_handle" autocomplete="username" maxlength="30" required />
+              <span>Email</span>
+              <input id="authEmailInput" type="email" placeholder="you@example.com" autocomplete="email" required />
             </label>
             <label class="auth-label">
               <span>Password</span>
-              <input id="authPasswordInput" type="password" placeholder="••••••" autocomplete="current-password" required />
+              <input id="authPasswordInput" type="password" placeholder="••••••••" autocomplete="current-password" required />
             </label>
             <p id="authError" class="auth-error" hidden></p>
             <button type="submit" class="upload-btn auth-submit-btn">Log in</button>
           </form>
           <div class="auth-divider"><span>or</span></div>
           <button id="authCreateAccountBtn" class="ghost-btn auth-create-btn">Create new account</button>
-          <button id="authSwitchAccountBtn" class="auth-switch-link">Switch account</button>
         </div>
 
         <!-- Create account panel -->
@@ -583,22 +613,18 @@
               <input id="authCreateUsername" type="text" placeholder="your_handle" maxlength="30" required />
             </label>
             <label class="auth-label">
+              <span>Email</span>
+              <input id="authCreateEmail" type="email" placeholder="you@example.com" autocomplete="email" required />
+            </label>
+            <label class="auth-label">
               <span>Password</span>
-              <input id="authCreatePassword" type="password" placeholder="Must be: Epiton" required />
+              <input id="authCreatePassword" type="password" placeholder="••••••••" autocomplete="new-password" minlength="8" maxlength="16" required />
+              <small id="authPasswordHint" class="auth-password-hint" style="display:none;">Password must be 8–16 characters</small>
             </label>
             <p id="authCreateError" class="auth-error" hidden></p>
             <button type="submit" class="upload-btn auth-submit-btn">Create account</button>
           </form>
           <button id="authBackToLoginBtn" class="auth-switch-link">← Back to login</button>
-        </div>
-
-        <!-- Switch account panel -->
-        <div id="authSwitchPanel" class="auth-panel" hidden>
-          <div class="auth-logo"><span class="logo-e">E</span>piton</div>
-          <p class="auth-tagline">Switch account</p>
-          <div id="authAccountList" class="auth-account-list"></div>
-          <button id="authAddAccountBtn" class="ghost-btn auth-create-btn">+ Add account</button>
-          <button id="authSwitchBackBtn" class="auth-switch-link">← Back to login</button>
         </div>
       </div>
     </div>
@@ -671,7 +697,14 @@
       </div>
     </div>
 
+    <!-- Disable legacy auth — Supabase handles auth -->
+    <script>window._useFirebaseAuth = true;</script>
     <script src="script.js"></script>
+
+    <!-- ===== SUPABASE INTEGRATION ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="supabase-epiton.js"></script>
     <script>
       (function () {
         const THEME_KEY = "instagram_theme_mode";
@@ -714,20 +747,21 @@
           studio.classList.toggle("open");
         });
 
+        const studioCloseBtn = document.getElementById("themeStudioClose");
+        if (studioCloseBtn) {
+          studioCloseBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            studio.classList.remove("open");
+          });
+        }
+
         document.addEventListener("click", (e) => {
           if (!studio.contains(e.target) && e.target !== toggleBtn) {
             studio.classList.remove("open");
           }
         });
 
-        // ── Theme list scroll buttons ──
-        const scrollAmt = 80;
-        document.getElementById("themeScrollUp").addEventListener("click", () => {
-          switches.scrollBy({ top: -scrollAmt, behavior: "smooth" });
-        });
-        document.getElementById("themeScrollDown").addEventListener("click", () => {
-          switches.scrollBy({ top: scrollAmt, behavior: "smooth" });
-        });
+
 
         applyTheme(localStorage.getItem(THEME_KEY) || "light");
 
@@ -756,328 +790,395 @@
 
         const W = () => canvas.width, H = () => canvas.height;
         const rand = (a, b) => Math.random() * (b - a) + a;
+        const randInt = (a, b) => Math.floor(rand(a, b));
 
-        /* ── DARK 1: EMBERS ── floating orange/red sparks rising */
-        function initEmbers() {
-          pool = Array.from({ length: 90 }, () => ({
-            x: rand(0, W()), y: rand(0, H()),
-            r: rand(1, 3.5),
-            vx: rand(-0.4, 0.4), vy: rand(-1.2, -0.3),
-            life: rand(0, 1), decay: rand(0.003, 0.007),
-            hue: rand(10, 40)
-          }));
-        }
-        function drawEmbers() {
-          ctx.clearRect(0, 0, W(), H());
-          pool.forEach(p => {
-            p.life -= p.decay; p.x += p.vx; p.y += p.vy;
-            p.vx += rand(-0.02, 0.02);
-            if (p.life <= 0 || p.y < -10) {
-              p.x = rand(0, W()); p.y = H() + 5;
-              p.life = rand(0.6, 1); p.vy = rand(-1.2, -0.3);
-              p.hue = rand(10, 40);
-            }
-            const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.5);
-            g.addColorStop(0, `hsla(${p.hue},100%,70%,${p.life * 0.9})`);
-            g.addColorStop(1, `hsla(${p.hue},100%,40%,0)`);
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
-            ctx.fillStyle = g; ctx.fill();
-          });
-          animFrame = requestAnimationFrame(drawEmbers);
-        }
-
-        /* ── DARK 2: NEBULA ── slow drifting coloured gas clouds */
-        function initNebula() {
-          pool = Array.from({ length: 7 }, (_, i) => ({
-            x: rand(0.1, 0.9), y: rand(0.1, 0.9),
-            rx: rand(0.18, 0.38), ry: rand(0.12, 0.28),
-            hue: [260, 200, 320, 180, 290, 220, 340][i],
-            t: rand(0, Math.PI * 2), speed: rand(0.0005, 0.0012)
-          }));
-        }
-        function drawNebula() {
-          ctx.clearRect(0, 0, W(), H());
-          pool.forEach(p => {
-            p.t += p.speed;
-            const cx = (p.x + Math.sin(p.t) * 0.06) * W();
-            const cy = (p.y + Math.cos(p.t * 0.7) * 0.05) * H();
-            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, p.rx * W());
-            g.addColorStop(0, `hsla(${p.hue},80%,55%,0.13)`);
-            g.addColorStop(0.5, `hsla(${p.hue + 30},70%,40%,0.07)`);
-            g.addColorStop(1, `hsla(${p.hue},60%,30%,0)`);
-            ctx.beginPath();
-            ctx.ellipse(cx, cy, p.rx * W(), p.ry * H(), p.t * 0.3, 0, Math.PI * 2);
-            ctx.fillStyle = g; ctx.fill();
-          });
-          animFrame = requestAnimationFrame(drawNebula);
-        }
-
-        /* ── DARK 3: MATRIX ── falling green code rain */
-        function initMatrix() {
-          const cols = Math.floor(W() / 16);
+        /* ── 1: NEON RAIN ── vertical streaks of neon light */
+        function initNeonRain() {
+          const cols = Math.floor(W() / 20);
           pool = Array.from({ length: cols }, (_, i) => ({
-            x: i * 16, y: rand(-H(), 0),
-            speed: rand(2, 6), chars: []
+            x: i * 20 + rand(0, 20), y: rand(-H(), 0),
+            len: rand(40, 160), speed: rand(3, 9),
+            hue: [180, 280, 320, 60, 200][i % 5], alpha: rand(0.4, 0.9)
           }));
         }
-        function drawMatrix() {
-          ctx.fillStyle = "rgba(0,0,0,0.06)";
+        function drawNeonRain() {
+          ctx.fillStyle = "rgba(0,0,0,0.08)";
           ctx.fillRect(0, 0, W(), H());
-          ctx.font = "13px monospace";
-          pool.forEach(col => {
-            col.y += col.speed;
-            if (col.y > H()) { col.y = rand(-200, -20); col.speed = rand(2, 6); }
-            const char = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
-            ctx.fillStyle = `rgba(0,255,80,${rand(0.5, 1)})`;
-            ctx.fillText(char, col.x, col.y);
-            ctx.fillStyle = "rgba(180,255,180,0.9)";
-            ctx.fillText(char, col.x, col.y - 16);
+          pool.forEach(p => {
+            p.y += p.speed;
+            if (p.y - p.len > H()) { p.y = -p.len; p.x = rand(0, W()); p.hue = randInt(0, 360); }
+            const g = ctx.createLinearGradient(p.x, p.y - p.len, p.x, p.y);
+            g.addColorStop(0, `hsla(${p.hue},100%,60%,0)`);
+            g.addColorStop(0.6, `hsla(${p.hue},100%,70%,${p.alpha * 0.6})`);
+            g.addColorStop(1, `hsla(${p.hue},100%,90%,${p.alpha})`);
+            ctx.beginPath(); ctx.moveTo(p.x, p.y - p.len); ctx.lineTo(p.x, p.y);
+            ctx.strokeStyle = g; ctx.lineWidth = rand(1, 2.5); ctx.stroke();
+            ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.hue},100%,95%,${p.alpha})`; ctx.fill();
           });
-          animFrame = requestAnimationFrame(drawMatrix);
+          animFrame = requestAnimationFrame(drawNeonRain);
         }
 
-        /* ── LIGHT 1: PETALS ── soft pink/white petals drifting down */
-        function initPetals() {
-          pool = Array.from({ length: 55 }, () => ({
-            x: rand(0, W()), y: rand(-H(), H()),
-            r: rand(4, 10), rot: rand(0, Math.PI * 2),
-            vx: rand(-0.5, 0.5), vy: rand(0.4, 1.4),
-            vrot: rand(-0.02, 0.02),
-            hue: rand(330, 360), alpha: rand(0.3, 0.7)
-          }));
-        }
-        function drawPetals() {
-          ctx.clearRect(0, 0, W(), H());
-          pool.forEach(p => {
-            p.y += p.vy; p.x += p.vx + Math.sin(p.y * 0.01) * 0.4;
-            p.rot += p.vrot;
-            if (p.y > H() + 20) { p.y = -20; p.x = rand(0, W()); }
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.rot);
-            ctx.beginPath();
-            ctx.ellipse(0, 0, p.r, p.r * 0.5, 0, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${p.hue},80%,80%,${p.alpha})`;
-            ctx.fill();
-            ctx.restore();
+        /* ── 2: GALAXY SWIRL ── rotating spiral galaxy */
+        function initGalaxy() {
+          pool = Array.from({ length: 600 }, (_, i) => {
+            const arm = i % 3, t = rand(0, 1);
+            const angle = arm * (Math.PI * 2 / 3) + t * Math.PI * 4 + rand(-0.3, 0.3);
+            const dist = t * Math.min(W(), H()) * 0.42 + rand(-20, 20);
+            return { angle, dist, speed: rand(0.0003, 0.0008) * (1 - t * 0.5),
+              r: rand(0.5, 2.5), hue: 200 + arm * 40 + rand(-20, 20), alpha: rand(0.4, 1) * (1 - t * 0.4) };
           });
-          animFrame = requestAnimationFrame(drawPetals);
+        }
+        function drawGalaxy() {
+          ctx.fillStyle = "rgba(0,0,0,0.04)";
+          ctx.fillRect(0, 0, W(), H());
+          const cx = W() / 2, cy = H() / 2;
+          pool.forEach(p => {
+            p.angle += p.speed;
+            const x = cx + Math.cos(p.angle) * p.dist;
+            const y = cy + Math.sin(p.angle) * p.dist * 0.45;
+            ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.hue},80%,75%,${p.alpha})`; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawGalaxy);
         }
 
-        /* ── LIGHT 2: BUBBLES ── rising translucent circles */
-        function initBubbles() {
-          pool = Array.from({ length: 40 }, () => ({
-            x: rand(0, W()), y: rand(0, H()),
-            r: rand(8, 36), vy: rand(-0.4, -1.2),
-            vx: rand(-0.2, 0.2), alpha: rand(0.08, 0.22),
-            hue: rand(190, 230)
-          }));
+        /* ── 3: LIGHTNING STORM ── electric bolts */
+        let lightningTimer = 0, bolts = [];
+        function makeBolt(x1, y1, x2, y2, depth) {
+          if (depth <= 0) return [{ x1, y1, x2, y2 }];
+          const mx = (x1 + x2) / 2 + rand(-60, 60) / depth;
+          const my = (y1 + y2) / 2 + rand(-60, 60) / depth;
+          return [...makeBolt(x1, y1, mx, my, depth - 1), ...makeBolt(mx, my, x2, y2, depth - 1)];
         }
-        function drawBubbles() {
-          ctx.clearRect(0, 0, W(), H());
-          pool.forEach(p => {
-            p.y += p.vy; p.x += p.vx;
-            if (p.y + p.r < 0) { p.y = H() + p.r; p.x = rand(0, W()); }
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.strokeStyle = `hsla(${p.hue},70%,60%,${p.alpha * 2})`;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            const g = ctx.createRadialGradient(p.x - p.r * 0.3, p.y - p.r * 0.3, 0, p.x, p.y, p.r);
-            g.addColorStop(0, `hsla(${p.hue},80%,95%,${p.alpha})`);
-            g.addColorStop(1, `hsla(${p.hue},60%,70%,0)`);
+        function drawLightning() {
+          ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(0, 0, W(), H());
+          lightningTimer--;
+          if (lightningTimer <= 0) {
+            lightningTimer = randInt(18, 55);
+            const x = rand(W() * 0.2, W() * 0.8);
+            bolts = makeBolt(x, 0, x + rand(-80, 80), H() * rand(0.5, 0.9), 5);
+          }
+          bolts.forEach(seg => {
+            ctx.beginPath(); ctx.moveTo(seg.x1, seg.y1); ctx.lineTo(seg.x2, seg.y2);
+            ctx.strokeStyle = `rgba(180,200,255,${rand(0.3, 0.9)})`;
+            ctx.lineWidth = rand(0.5, 2); ctx.shadowColor = "#88aaff"; ctx.shadowBlur = 12;
+            ctx.stroke(); ctx.shadowBlur = 0;
+          });
+          animFrame = requestAnimationFrame(drawLightning);
+        }
+
+        /* ── 4: OCEAN WAVES ── flowing layered sine waves */
+        function drawOcean() {
+          ctx.clearRect(0, 0, W(), H()); bgT += 0.018;
+          const layers = [
+            { amp: 28, freq: 0.012, speed: 1.0, hue: 200, alpha: 0.18, yOff: 0.55 },
+            { amp: 20, freq: 0.018, speed: 1.4, hue: 210, alpha: 0.14, yOff: 0.62 },
+            { amp: 16, freq: 0.022, speed: 0.8, hue: 190, alpha: 0.20, yOff: 0.70 },
+            { amp: 12, freq: 0.030, speed: 1.8, hue: 220, alpha: 0.12, yOff: 0.78 }
+          ];
+          layers.forEach(l => {
+            ctx.beginPath(); ctx.moveTo(0, H());
+            for (let x = 0; x <= W(); x += 4) {
+              const y = l.yOff * H() + Math.sin(x * l.freq + bgT * l.speed) * l.amp
+                      + Math.sin(x * l.freq * 0.5 + bgT * l.speed * 0.7) * l.amp * 0.5;
+              ctx.lineTo(x, y);
+            }
+            ctx.lineTo(W(), H()); ctx.closePath();
+            const g = ctx.createLinearGradient(0, l.yOff * H() - l.amp, 0, H());
+            g.addColorStop(0, `hsla(${l.hue},80%,55%,${l.alpha})`);
+            g.addColorStop(1, `hsla(${l.hue},80%,40%,${l.alpha * 0.3})`);
             ctx.fillStyle = g; ctx.fill();
           });
-          animFrame = requestAnimationFrame(drawBubbles);
+          animFrame = requestAnimationFrame(drawOcean);
         }
 
-        /* ── LIGHT 3: CONFETTI ── colourful tumbling rectangles */
-        function initConfetti() {
-          pool = Array.from({ length: 70 }, () => ({
-            x: rand(0, W()), y: rand(-H(), H()),
-            w: rand(6, 14), h: rand(3, 7),
-            rot: rand(0, Math.PI * 2), vrot: rand(-0.04, 0.04),
-            vy: rand(0.8, 2.2), vx: rand(-0.5, 0.5),
-            hue: rand(0, 360), alpha: rand(0.5, 0.9)
+        /* ── 5: FIREFLIES ── glowing drifting dots */
+        function initFireflies() {
+          pool = Array.from({ length: 80 }, () => ({
+            x: rand(0, W()), y: rand(0, H()), r: rand(2, 5),
+            vx: rand(-0.5, 0.5), vy: rand(-0.5, 0.5),
+            hue: rand(50, 130), phase: rand(0, Math.PI * 2), speed: rand(0.02, 0.06)
           }));
         }
-        function drawConfetti() {
+        function drawFireflies() {
+          ctx.fillStyle = "rgba(0,0,0,0.06)"; ctx.fillRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.phase += p.speed;
+            p.x += p.vx + Math.sin(p.phase * 0.7) * 0.4;
+            p.y += p.vy + Math.cos(p.phase * 0.5) * 0.4;
+            if (p.x < 0) p.x = W(); if (p.x > W()) p.x = 0;
+            if (p.y < 0) p.y = H(); if (p.y > H()) p.y = 0;
+            const alpha = 0.4 + 0.6 * Math.abs(Math.sin(p.phase));
+            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+            glow.addColorStop(0, `hsla(${p.hue},100%,80%,${alpha})`);
+            glow.addColorStop(0.4, `hsla(${p.hue},100%,60%,${alpha * 0.4})`);
+            glow.addColorStop(1, `hsla(${p.hue},100%,50%,0)`);
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2);
+            ctx.fillStyle = glow; ctx.fill();
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.6, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.hue},100%,95%,${alpha})`; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawFireflies);
+        }
+
+        /* ── 6: GEO PULSE ── morphing geometric shapes */
+        function initGeoPulse() {
+          pool = Array.from({ length: 12 }, (_, i) => ({
+            x: rand(0.1, 0.9), y: rand(0.1, 0.9), sides: randInt(3, 7),
+            size: rand(30, 90), rot: rand(0, Math.PI * 2), vrot: rand(-0.008, 0.008),
+            phase: rand(0, Math.PI * 2), hue: i * 30, speed: rand(0.01, 0.025)
+          }));
+        }
+        function drawGeoPulse() {
           ctx.clearRect(0, 0, W(), H());
           pool.forEach(p => {
-            p.y += p.vy; p.x += p.vx; p.rot += p.vrot;
-            if (p.y > H() + 20) { p.y = -20; p.x = rand(0, W()); }
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.rot);
-            ctx.fillStyle = `hsla(${p.hue},85%,60%,${p.alpha})`;
-            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-            ctx.restore();
+            p.rot += p.vrot; p.phase += p.speed;
+            const s = p.size * (0.7 + 0.3 * Math.sin(p.phase));
+            const cx = p.x * W(), cy = p.y * H();
+            ctx.beginPath();
+            for (let i = 0; i <= p.sides; i++) {
+              const a = (i / p.sides) * Math.PI * 2 + p.rot;
+              i === 0 ? ctx.moveTo(cx + Math.cos(a) * s, cy + Math.sin(a) * s)
+                      : ctx.lineTo(cx + Math.cos(a) * s, cy + Math.sin(a) * s);
+            }
+            ctx.closePath();
+            const alpha = 0.06 + 0.06 * Math.sin(p.phase);
+            ctx.strokeStyle = `hsla(${p.hue},80%,65%,${alpha * 4})`; ctx.lineWidth = 1.5; ctx.stroke();
+            ctx.fillStyle = `hsla(${p.hue},80%,55%,${alpha})`; ctx.fill();
           });
-          animFrame = requestAnimationFrame(drawConfetti);
+          animFrame = requestAnimationFrame(drawGeoPulse);
         }
 
-        /* ── FLOATING 1: STARFIELD ── deep space parallax stars */
-        function initStarfield() {
-          pool = Array.from({ length: 180 }, () => ({
-            x: rand(0, W()), y: rand(0, H()),
-            r: rand(0.4, 2.2), speed: rand(0.05, 0.5),
-            alpha: rand(0.3, 1), twinkle: rand(0, Math.PI * 2)
+        /* ── 7: INK DROP ── spreading ink blobs */
+        function initInkDrop() {
+          pool = Array.from({ length: 6 }, (_, i) => ({
+            x: rand(0.1, 0.9), y: rand(0.1, 0.9), r: rand(20, 60),
+            maxR: rand(120, 260), hue: i * 55, alpha: rand(0.06, 0.14),
+            speed: rand(0.4, 1.2), phase: rand(0, Math.PI * 2)
           }));
         }
-        function drawStarfield() {
+        function drawInkDrop() {
+          ctx.fillStyle = "rgba(0,0,0,0.03)"; ctx.fillRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.r += p.speed; p.phase += 0.012;
+            if (p.r > p.maxR) { p.r = 0; p.x = rand(0.1, 0.9); p.y = rand(0.1, 0.9); }
+            const fade = 1 - p.r / p.maxR;
+            const cx = p.x * W() + Math.sin(p.phase) * 10;
+            const cy = p.y * H() + Math.cos(p.phase * 0.7) * 8;
+            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, p.r);
+            g.addColorStop(0, `hsla(${p.hue},70%,30%,${p.alpha * fade * 2})`);
+            g.addColorStop(0.5, `hsla(${p.hue + 20},60%,20%,${p.alpha * fade})`);
+            g.addColorStop(1, `hsla(${p.hue},50%,10%,0)`);
+            ctx.beginPath(); ctx.arc(cx, cy, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = g; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawInkDrop);
+        }
+
+        /* ── 8: CYBER GRID ── glowing perspective grid */
+        function drawCyberGrid() {
+          ctx.clearRect(0, 0, W(), H()); bgT += 0.012;
+          const horizon = H() * 0.45, vpx = W() / 2;
+          for (let i = 0; i <= 18; i++) {
+            const t = i / 18, y = horizon + (H() - horizon) * (t * t);
+            const spread = (y - horizon) / (H() - horizon);
+            ctx.beginPath(); ctx.moveTo(vpx - spread * W() * 0.7, y); ctx.lineTo(vpx + spread * W() * 0.7, y);
+            ctx.strokeStyle = `rgba(0,220,255,${0.04 + spread * 0.18})`; ctx.lineWidth = 0.8; ctx.stroke();
+          }
+          for (let i = -7; i <= 7; i++) {
+            ctx.beginPath(); ctx.moveTo(vpx, horizon); ctx.lineTo(vpx + (i / 7) * W() * 0.7, H());
+            ctx.strokeStyle = "rgba(0,220,255,0.12)"; ctx.lineWidth = 0.8; ctx.stroke();
+          }
+          const scanY = horizon + ((bgT * 18) % (H() - horizon));
+          const ss = (scanY - horizon) / (H() - horizon);
+          ctx.beginPath(); ctx.moveTo(vpx - ss * W() * 0.7, scanY); ctx.lineTo(vpx + ss * W() * 0.7, scanY);
+          ctx.strokeStyle = "rgba(0,255,220,0.55)"; ctx.lineWidth = 1.5;
+          ctx.shadowColor = "#00ffdc"; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
+          animFrame = requestAnimationFrame(drawCyberGrid);
+        }
+
+        /* ── 9: SNOW ── realistic falling snow */
+        function initSnow() {
+          pool = Array.from({ length: 140 }, () => ({
+            x: rand(0, W()), y: rand(-20, H()), r: rand(1.5, 5),
+            vy: rand(0.5, 2.2), vx: rand(-0.3, 0.3), alpha: rand(0.4, 0.9),
+            wobble: rand(0, Math.PI * 2), wobbleSpeed: rand(0.01, 0.03)
+          }));
+        }
+        function drawSnow() {
+          ctx.clearRect(0, 0, W(), H());
+          pool.forEach(p => {
+            p.wobble += p.wobbleSpeed; p.x += p.vx + Math.sin(p.wobble) * 0.5; p.y += p.vy;
+            if (p.y > H() + 10) { p.y = -10; p.x = rand(0, W()); }
+            const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+            g.addColorStop(0, `rgba(255,255,255,${p.alpha})`);
+            g.addColorStop(1, "rgba(200,220,255,0)");
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = g; ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawSnow);
+        }
+
+        /* ── 10: VORTEX ── spinning particle spiral */
+        function initVortex() {
+          pool = Array.from({ length: 300 }, (_, i) => ({
+            angle: rand(0, Math.PI * 2), dist: rand(10, Math.min(W(), H()) * 0.45),
+            speed: rand(0.008, 0.025), r: rand(1, 3), hue: (i * 1.2) % 360,
+            alpha: rand(0.4, 0.9), inward: rand(0.1, 0.5)
+          }));
+        }
+        function drawVortex() {
+          ctx.fillStyle = "rgba(0,0,0,0.07)"; ctx.fillRect(0, 0, W(), H());
+          const cx = W() / 2, cy = H() / 2;
+          pool.forEach(p => {
+            p.angle += p.speed * (1 + 0.5 / (p.dist / 100 + 0.1));
+            p.dist -= p.inward * 0.15;
+            if (p.dist < 5) { p.dist = Math.min(W(), H()) * 0.45; p.angle = rand(0, Math.PI * 2); }
+            const x = cx + Math.cos(p.angle) * p.dist;
+            const y = cy + Math.sin(p.angle) * p.dist * 0.6;
+            ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.hue},90%,70%,${p.alpha * (p.dist / (Math.min(W(), H()) * 0.45))})`;
+            ctx.fill();
+          });
+          animFrame = requestAnimationFrame(drawVortex);
+        }
+
+        /* ── EPITON SIGNATURE ── black bg, gold E orbits + grid */
+        function initEpiton() {
+          // orbiting particles around a central "E"
+          pool = Array.from({ length: 120 }, (_, i) => {
+            const ring = Math.floor(i / 40);
+            return {
+              angle: rand(0, Math.PI * 2),
+              dist: 80 + ring * 70 + rand(-15, 15),
+              speed: (0.006 - ring * 0.0015) * (Math.random() > 0.5 ? 1 : -1),
+              r: rand(1, ring === 0 ? 3 : 2),
+              hue: ring === 0 ? 45 : ring === 1 ? 38 : 200,
+              alpha: rand(0.5, 1)
+            };
+          });
+        }
+        function drawEpiton() {
+          // black background
           ctx.fillStyle = "rgba(0,0,0,0.18)";
           ctx.fillRect(0, 0, W(), H());
-          bgT += 0.018;
+          bgT += 0.008;
+          const cx = W() / 2, cy = H() / 2;
+
+          // subtle grid
+          ctx.strokeStyle = "rgba(255,200,50,0.04)";
+          ctx.lineWidth = 0.5;
+          const gs = 60;
+          for (let x = 0; x < W(); x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H()); ctx.stroke(); }
+          for (let y = 0; y < H(); y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W(), y); ctx.stroke(); }
+
+          // orbit rings (faint)
+          [80, 150, 220].forEach((r, i) => {
+            ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(255,190,30,${0.06 - i * 0.015})`; ctx.lineWidth = 1; ctx.stroke();
+          });
+
+          // particles
           pool.forEach(p => {
-            p.y += p.speed; p.twinkle += 0.04;
-            if (p.y > H()) { p.y = 0; p.x = rand(0, W()); }
-            const a = p.alpha * (0.6 + 0.4 * Math.sin(p.twinkle));
-            const hue = rand(200, 260);
-            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue},60%,95%,${a})`; ctx.fill();
+            p.angle += p.speed;
+            const x = cx + Math.cos(p.angle) * p.dist;
+            const y = cy + Math.sin(p.angle) * p.dist * 0.55;
+            const glow = ctx.createRadialGradient(x, y, 0, x, y, p.r * 3);
+            glow.addColorStop(0, `hsla(${p.hue},100%,75%,${p.alpha})`);
+            glow.addColorStop(1, `hsla(${p.hue},100%,55%,0)`);
+            ctx.beginPath(); ctx.arc(x, y, p.r * 3, 0, Math.PI * 2);
+            ctx.fillStyle = glow; ctx.fill();
           });
-          animFrame = requestAnimationFrame(drawStarfield);
+
+          // central "E" glyph
+          const pulse = 1 + 0.06 * Math.sin(bgT * 2);
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.scale(pulse, pulse);
+          ctx.font = "bold 64px 'Poppins', sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          // glow layers
+          ctx.shadowColor = "rgba(255,190,30,0.9)";
+          ctx.shadowBlur = 32;
+          ctx.fillStyle = "rgba(255,200,50,0.15)";
+          ctx.fillText("E", 0, 0);
+          ctx.shadowBlur = 16;
+          ctx.fillStyle = "rgba(255,210,80,0.55)";
+          ctx.fillText("E", 0, 0);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "rgba(255,220,100,0.9)";
+          ctx.fillText("E", 0, 0);
+          ctx.restore();
+
+          animFrame = requestAnimationFrame(drawEpiton);
         }
 
-        /* ── FLOATING 2: AURORA DRIFT ── sweeping northern lights */
-        function drawAuroraDrift() {
-          ctx.clearRect(0, 0, W(), H());
-          bgT += 0.006;
-          const bands = [
-            { hue: 160, y: 0.25, amp: 0.08, speed: 1.0 },
-            { hue: 200, y: 0.40, amp: 0.06, speed: 0.7 },
-            { hue: 280, y: 0.55, amp: 0.09, speed: 1.3 },
-            { hue: 140, y: 0.35, amp: 0.05, speed: 0.5 }
-          ];
-          bands.forEach(b => {
-            const cy = (b.y + Math.sin(bgT * b.speed) * b.amp) * H();
-            const g = ctx.createLinearGradient(0, cy - H() * 0.18, 0, cy + H() * 0.18);
-            g.addColorStop(0,   `hsla(${b.hue},90%,60%,0)`);
-            g.addColorStop(0.4, `hsla(${b.hue},90%,55%,0.12)`);
-            g.addColorStop(0.5, `hsla(${b.hue + 20},85%,65%,0.18)`);
-            g.addColorStop(0.6, `hsla(${b.hue},90%,55%,0.12)`);
-            g.addColorStop(1,   `hsla(${b.hue},90%,60%,0)`);
-            ctx.fillStyle = g;
-            ctx.fillRect(0, cy - H() * 0.18, W(), H() * 0.36);
-          });
-          animFrame = requestAnimationFrame(drawAuroraDrift);
-        }
-
-        /* ── FLOATING 3: LAVA LAMP ── slow rising blobs */
-        function initLavaLamp() {
+        /* ── PULSE WAVE ── sound-wave rings on black, suits social app */
+        function initPulseWave() {
           pool = Array.from({ length: 8 }, (_, i) => ({
-            x: rand(0.1, 0.9), y: rand(0.2, 0.9),
-            rx: rand(0.06, 0.14), ry: rand(0.08, 0.18),
-            vy: rand(-0.0004, -0.0001),
-            hue: [20, 340, 40, 300, 15, 330, 50, 310][i],
-            t: rand(0, Math.PI * 2), wobble: rand(0.001, 0.003)
+            r: i * 40, maxR: W() * 0.7,
+            speed: 1.2 + i * 0.3,
+            hue: 200 + i * 18,
+            alpha: 0.7 - i * 0.07,
+            offset: i * 0.4
           }));
         }
-        function drawLavaLamp() {
-          ctx.clearRect(0, 0, W(), H());
+        function drawPulseWave() {
+          ctx.fillStyle = "rgba(0,0,0,0.12)";
+          ctx.fillRect(0, 0, W(), H());
+          bgT += 0.018;
+          const cx = W() / 2, cy = H() / 2;
           pool.forEach(p => {
-            p.y += p.vy; p.t += p.wobble;
-            if (p.y < -0.2) { p.y = 1.1; p.x = rand(0.1, 0.9); }
-            const cx = (p.x + Math.sin(p.t) * 0.04) * W();
-            const cy = p.y * H();
-            const rx = (p.rx + Math.sin(p.t * 1.3) * 0.02) * W();
-            const ry = (p.ry + Math.cos(p.t) * 0.02) * H();
-            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rx, ry));
-            g.addColorStop(0,   `hsla(${p.hue},90%,65%,0.22)`);
-            g.addColorStop(0.6, `hsla(${p.hue + 20},80%,55%,0.12)`);
-            g.addColorStop(1,   `hsla(${p.hue},70%,45%,0)`);
+            p.r += p.speed;
+            if (p.r > p.maxR) p.r = 0;
+            const fade = 1 - p.r / p.maxR;
+            const wave = Math.sin(bgT * 3 + p.offset) * 0.3 + 0.7;
             ctx.beginPath();
-            ctx.ellipse(cx, cy, rx, ry, p.t * 0.2, 0, Math.PI * 2);
-            ctx.fillStyle = g; ctx.fill();
+            ctx.arc(cx, cy, p.r, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsla(${p.hue},90%,65%,${p.alpha * fade * wave})`;
+            ctx.lineWidth = 1.5 + fade * 2;
+            ctx.stroke();
           });
-          animFrame = requestAnimationFrame(drawLavaLamp);
-        }
-
-        /* ── UNIQUE 1: DNA HELIX ── double helix scrolling vertically */
-        let dnaT = 0;
-        function drawDNA() {
-          ctx.clearRect(0, 0, W(), H());
-          dnaT += 0.025;
-          const cx = W() / 2, amp = Math.min(W() * 0.18, 120);
-          const step = 18, total = Math.ceil(H() / step) + 2;
-          for (let i = 0; i < total; i++) {
-            const y = (i * step - (dnaT * 60) % (step * total) + H() * 2) % (H() + step * 2) - step;
-            const phase = i * 0.38 + dnaT;
-            const x1 = cx + Math.sin(phase) * amp;
-            const x2 = cx + Math.sin(phase + Math.PI) * amp;
-            const t = (Math.sin(phase) + 1) / 2;
-            const hue1 = 200 + t * 60, hue2 = 320 - t * 60;
-            // strand dots
-            ctx.beginPath(); ctx.arc(x1, y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue1},90%,65%,0.85)`; ctx.fill();
-            ctx.beginPath(); ctx.arc(x2, y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue2},90%,65%,0.85)`; ctx.fill();
-            // rung
-            const alpha = 0.15 + Math.abs(Math.sin(phase)) * 0.25;
-            ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y);
-            ctx.strokeStyle = `rgba(180,180,255,${alpha})`; ctx.lineWidth = 1.5; ctx.stroke();
-          }
-          animFrame = requestAnimationFrame(drawDNA);
-        }
-
-        /* ── UNIQUE 2: PULSE GRID ── expanding rings from grid nodes */
-        function initPulse() {
-          const cols = Math.ceil(W() / 120) + 1, rows = Math.ceil(H() / 120) + 1;
-          pool = [];
-          for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-              pool.push({ x: c * 120, y: r * 120, phase: rand(0, Math.PI * 2) });
-            }
-          }
-        }
-        function drawPulse() {
-          ctx.clearRect(0, 0, W(), H());
-          bgT += 0.022;
-          const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-          pool.forEach(p => {
-            const wave = (Math.sin(bgT + p.phase) + 1) / 2;
-            const maxR = 52, r = wave * maxR;
-            const alpha = (1 - wave) * (isDark ? 0.18 : 0.12);
-            const hue = isDark ? 220 + wave * 60 : 200 + wave * 40;
-            ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-            ctx.strokeStyle = `hsla(${hue},80%,${isDark ? 65 : 50}%,${alpha})`;
-            ctx.lineWidth = 1.2; ctx.stroke();
-            // dot at node
-            ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue},80%,60%,${isDark ? 0.3 : 0.2})`; ctx.fill();
-          });
-          animFrame = requestAnimationFrame(drawPulse);
+          // centre dot
+          const cPulse = 0.5 + 0.5 * Math.sin(bgT * 4);
+          const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 20 + cPulse * 10);
+          cg.addColorStop(0, `rgba(100,180,255,${0.6 + cPulse * 0.3})`);
+          cg.addColorStop(1, "rgba(100,180,255,0)");
+          ctx.beginPath(); ctx.arc(cx, cy, 20 + cPulse * 10, 0, Math.PI * 2);
+          ctx.fillStyle = cg; ctx.fill();
+          animFrame = requestAnimationFrame(drawPulseWave);
         }
 
         function applyBg(mode) {
           bgMode = mode;
           localStorage.setItem(BG_KEY, mode);
-          document.getElementById("bgSwitches").querySelectorAll(".bg-btn").forEach(b => {
+          document.getElementById("bgSwitches").querySelectorAll(".bg-chip,.bg-btn").forEach(b => {
             b.classList.toggle("active", b.dataset.bg === mode);
           });
           clearBg();
           if (mode === "none") return;
           canvas.style.opacity = "1";
-          if      (mode === "embers")     { initEmbers();    drawEmbers(); }
-          else if (mode === "nebula")     { initNebula();    drawNebula(); }
-          else if (mode === "matrix")     { initMatrix();    drawMatrix(); }
-          else if (mode === "starfield")  { initStarfield(); drawStarfield(); }
-          else if (mode === "petals")     { initPetals();    drawPetals(); }
-          else if (mode === "bubbles")    { initBubbles();   drawBubbles(); }
-          else if (mode === "confetti")   { initConfetti();  drawConfetti(); }
-          else if (mode === "lavalamp")   { initLavaLamp();  drawLavaLamp(); }
-          else if (mode === "auroradrift"){ drawAuroraDrift(); }
-          else if (mode === "dna")        { drawDNA(); }
-          else if (mode === "pulse")      { initPulse();     drawPulse(); }
+          if      (mode === "epiton")    { initEpiton();    drawEpiton(); }
+          else if (mode === "pulsewave") { initPulseWave(); drawPulseWave(); }
+          else if (mode === "neonrain")  { initNeonRain();  drawNeonRain(); }
+          else if (mode === "galaxy")    { initGalaxy();    drawGalaxy(); }
+          else if (mode === "lightning") { lightningTimer = 0; bolts = []; drawLightning(); }
+          else if (mode === "ocean")     { drawOcean(); }
+          else if (mode === "fireflies") { initFireflies(); drawFireflies(); }
+          else if (mode === "geopulse")  { initGeoPulse();  drawGeoPulse(); }
+          else if (mode === "inkdrop")   { initInkDrop();   drawInkDrop(); }
+          else if (mode === "cybergrid") { drawCyberGrid(); }
+          else if (mode === "snow")      { initSnow();      drawSnow(); }
+          else if (mode === "vortex")    { initVortex();    drawVortex(); }
         }
 
         document.getElementById("bgSwitches").addEventListener("click", e => {
-          const btn = e.target.closest(".bg-btn");
+          const btn = e.target.closest(".bg-chip,.bg-btn");
           if (btn) { applyBg(btn.dataset.bg); studio.classList.remove("open"); }
         });
 
-        // re-init on resize so grid/columns recalculate
         window.addEventListener("resize", () => {
           if (bgMode !== "none") { clearBg(); applyBg(bgMode); }
         });

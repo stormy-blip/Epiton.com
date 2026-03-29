@@ -62,253 +62,11 @@ const suggested = [
   { user: "rio.draws",  info: "Suggested for you",      avatar: "https://randomuser.me/api/portraits/women/17.jpg" }
 ];
 
-const defaultConversations = [
-  {
-    id: "c1",
-    user: "nina.run",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    status: "Online",
-    unread: 2,
-    messages: [
-      { from: "them", text: "Hey! Are you free this evening?" },
-      { from: "you", text: "Yes, after 7pm works for me." },
-      { from: "them", text: "Perfect. Let us plan the shoot." }
-    ]
-  },
-  {
-    id: "c2",
-    user: "travelmax",
-    avatar: "https://randomuser.me/api/portraits/men/52.jpg",
-    status: "Last seen 12m ago",
-    unread: 1,
-    messages: [
-      { from: "them", text: "I just uploaded the mountain photos." },
-      { from: "you", text: "They look incredible." }
-    ]
-  },
-  {
-    id: "c3",
-    user: "studio.vera",
-    avatar: "https://randomuser.me/api/portraits/women/55.jpg",
-    status: "Online",
-    unread: 0,
-    messages: [
-      { from: "them", text: "Can you review the draft layout?" },
-      { from: "you", text: "On it. I will send notes shortly." }
-    ]
-  },
-  {
-    id: "c4",
-    user: "kai.codes",
-    avatar: "https://randomuser.me/api/portraits/men/78.jpg",
-    status: "Last seen 9m ago",
-    unread: 1,
-    messages: [
-      { from: "them", text: "Can we review the prototype?" },
-      { from: "you", text: "Sure, send me the link." },
-      { from: "them", text: "Just dropped it in the shared folder." }
-    ]
-  },
-  {
-    id: "c5",
-    user: "denzo.music",
-    avatar: "https://randomuser.me/api/portraits/men/61.jpg",
-    status: "Online",
-    unread: 3,
-    messages: [
-      { from: "them", text: "Want to hear the new mix?" },
-      { from: "you", text: "Yes send it over!" },
-      { from: "them", text: "Just uploaded it. Let me know what you think 🎧" },
-      { from: "them", text: "The drop at 1:42 is the best part." }
-    ]
-  },
-  {
-    id: "c6",
-    user: "priya.dev",
-    avatar: "https://randomuser.me/api/portraits/women/63.jpg",
-    status: "Last seen 5m ago",
-    unread: 0,
-    messages: [
-      { from: "them", text: "Hey, I pushed the fix. Can you pull and test?" },
-      { from: "you", text: "On it now." },
-      { from: "them", text: "Thanks, let me know if the build passes." }
-    ]
-  }
-];
+// Real conversations loaded from Firebase — no mock data
+const defaultConversations = [];
 
-const contactDirectory = [
-  {
-    user: "nina.run",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    status: "Online",
-    firstMessage: "Hey, want to collab this weekend?"
-  },
-  {
-    user: "travelmax",
-    avatar: "https://randomuser.me/api/portraits/men/52.jpg",
-    status: "Last seen 12m ago",
-    firstMessage: "I found a new hiking route for us."
-  },
-  {
-    user: "studio.vera",
-    avatar: "https://randomuser.me/api/portraits/women/55.jpg",
-    status: "Online",
-    firstMessage: "Can we review the brand draft?"
-  },
-  {
-    user: "mealcrumbs",
-    avatar: "https://randomuser.me/api/portraits/men/23.jpg",
-    status: "Active now",
-    firstMessage: "Just posted a fresh recipe 🍲"
-  },
-  {
-    user: "lensloop",
-    avatar: "https://randomuser.me/api/portraits/women/33.jpg",
-    status: "Last seen 3h ago",
-    firstMessage: "Did you check the edits?"
-  },
-  {
-    user: "rio.draws",
-    avatar: "https://randomuser.me/api/portraits/women/17.jpg",
-    status: "Online",
-    firstMessage: "Sketch session tonight? ✍️"
-  },
-  {
-    user: "chef.ollie",
-    avatar: "https://randomuser.me/api/portraits/men/36.jpg",
-    status: "Active now",
-    firstMessage: "Sending over the menu ideas."
-  },
-  {
-    user: "flora.day",
-    avatar: "https://randomuser.me/api/portraits/women/82.jpg",
-    status: "Last seen 42m ago",
-    firstMessage: "Love your latest post 🌼"
-  }
-];
-
-contactDirectory.push(
-  {
-    user: "denzo.music",
-    avatar: "https://randomuser.me/api/portraits/men/61.jpg",
-    status: "Online",
-    firstMessage: "Want to hear the new mix?"
-  },
-  {
-    user: "mila.art",
-    avatar: "https://randomuser.me/api/portraits/women/29.jpg",
-    status: "Active now",
-    firstMessage: "I can share the color palette now."
-  },
-  {
-    user: "kai.codes",
-    avatar: "https://randomuser.me/api/portraits/men/78.jpg",
-    status: "Last seen 9m ago",
-    firstMessage: "Can we review the prototype?"
-  },
-  {
-    user: "sunny.j",
-    avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-    status: "Online",
-    firstMessage: "Beach meetup tomorrow?"
-  },
-  {
-    user: "zara.fit",
-    avatar: "https://randomuser.me/api/portraits/women/48.jpg",
-    status: "Active now",
-    firstMessage: "Morning run done 💪 you joining today?"
-  },
-  {
-    user: "theo.lens",
-    avatar: "https://randomuser.me/api/portraits/men/19.jpg",
-    status: "Online",
-    firstMessage: "Just got back from the golden hour shoot. Incredible light today."
-  },
-  {
-    user: "priya.dev",
-    avatar: "https://randomuser.me/api/portraits/women/63.jpg",
-    status: "Last seen 5m ago",
-    firstMessage: "Hey, I pushed the fix. Can you pull and test?"
-  },
-  {
-    user: "marco.eats",
-    avatar: "https://randomuser.me/api/portraits/men/44.jpg",
-    status: "Active now",
-    firstMessage: "Tried that new place downtown. You have to go 🍜"
-  },
-  {
-    user: "leila.writes",
-    avatar: "https://randomuser.me/api/portraits/women/71.jpg",
-    status: "Online",
-    firstMessage: "Finished the first draft. Want to read it?"
-  },
-  {
-    user: "sam.travel",
-    avatar: "https://randomuser.me/api/portraits/men/88.jpg",
-    status: "Last seen 1h ago",
-    firstMessage: "Just landed in Lisbon. This city is something else."
-  },
-  {
-    user: "nia.style",
-    avatar: "https://randomuser.me/api/portraits/women/37.jpg",
-    status: "Online",
-    firstMessage: "New drop is live. Check the link in my bio 🔥"
-  },
-  {
-    user: "felix.build",
-    avatar: "https://randomuser.me/api/portraits/men/57.jpg",
-    status: "Active now",
-    firstMessage: "The app is almost ready. Just fixing the last edge case."
-  },
-  {
-    user: "amara.photo",
-    avatar: "https://randomuser.me/api/portraits/women/91.jpg",
-    status: "Online",
-    firstMessage: "Your feed is looking so clean lately. What preset are you using?"
-  },
-  {
-    user: "jake.sport",
-    avatar: "https://randomuser.me/api/portraits/men/33.jpg",
-    status: "Last seen 20m ago",
-    firstMessage: "Game is on tonight. You watching?"
-  },
-  {
-    user: "cleo.design",
-    avatar: "https://randomuser.me/api/portraits/women/22.jpg",
-    status: "Active now",
-    firstMessage: "Sent you the revised mockups. Let me know what you think."
-  },
-  {
-    user: "omar.beats",
-    avatar: "https://randomuser.me/api/portraits/men/66.jpg",
-    status: "Online",
-    firstMessage: "New track dropping Friday. You are going to love this one."
-  },
-  {
-    user: "ivy.bloom",
-    avatar: "https://randomuser.me/api/portraits/women/58.jpg",
-    status: "Last seen 2h ago",
-    firstMessage: "The garden is looking amazing this season 🌿"
-  },
-  {
-    user: "ravi.tech",
-    avatar: "https://randomuser.me/api/portraits/men/42.jpg",
-    status: "Active now",
-    firstMessage: "Have you tried the new framework? It is genuinely fast."
-  },
-  {
-    user: "luna.yoga",
-    avatar: "https://randomuser.me/api/portraits/women/84.jpg",
-    status: "Online",
-    firstMessage: "Morning session at 7am if you want to join 🧘"
-  },
-  {
-    user: "cole.film",
-    avatar: "https://randomuser.me/api/portraits/men/25.jpg",
-    status: "Last seen 30m ago",
-    firstMessage: "Watched that film you recommended. Absolutely brilliant."
-  }
-);
+// Real contacts loaded from Firebase — no mock data
+const contactDirectory = [];
 
 // expose data globals for search
 window.stories = stories;
@@ -1801,8 +1559,12 @@ function renderConversationList() {
   conversationListEl.innerHTML = "";
 
   if (conversations.length === 0) {
-    conversationListEl.innerHTML =
-      '<p class="empty-conversations">No threads yet. Create one to start chatting.</p>';
+    conversationListEl.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;color:var(--text-secondary);">
+        <div style="font-size:36px;margin-bottom:10px;">💬</div>
+        <p style="font-weight:700;margin:0 0 6px;">No messages yet</p>
+        <small>Tap 👥 to find people and start chatting</small>
+      </div>`;
     setMobileChatView(false);
     return;
   }
@@ -3479,6 +3241,42 @@ if (notificationsNavBtnEl && notificationsPanelEl) {
   });
 }
 
+// ── People nav button (sidebar) ───────────────────────────────────
+(function () {
+  function _openPeople() {
+    const page = document.getElementById("peoplePage");
+    if (!page) return;
+    page.hidden = false;
+    page.setAttribute("aria-hidden", "false");
+    if (typeof openOverlay === "function") openOverlay("peoplePage");
+    if (window._loadPeoplePage) {
+      window._loadPeoplePage();
+    } else {
+      const list = document.getElementById("peopleList");
+      if (list) list.innerHTML = '<div class="people-loading">Sign in to see people…</div>';
+      setTimeout(() => { if (window._loadPeoplePage) window._loadPeoplePage(); }, 2000);
+    }
+  }
+
+  const btn  = document.getElementById("peopleNavBtn");
+  const page = document.getElementById("peoplePage");
+  if (!btn || !page) return;
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    _openPeople();
+  });
+  const closeBtn = document.getElementById("peoplePageClose");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      page.hidden = true;
+      page.setAttribute("aria-hidden", "true");
+      if (typeof closeOverlay === "function") closeOverlay("peoplePage");
+    });
+  }
+  // Expose for mobile nav
+  window._openPeoplePage = _openPeople;
+})();
+
 const notificationsPanelCloseBtnEl = document.getElementById("notificationsPanelCloseBtn");
 if (notificationsPanelCloseBtnEl) {
   notificationsPanelCloseBtnEl.addEventListener("click", () => {
@@ -3513,6 +3311,8 @@ if (editProfileBtnEl) {
 
 if (profileImageInputEl) {
   profileImageInputEl.addEventListener("change", () => {
+    // When Supabase auth is active, let supabase-epiton.js handle the upload
+    if (window._useFirebaseAuth) return;
     const file = profileImageInputEl.files[0];
     if (!file || !file.type.startsWith("image/")) {
       return;
@@ -3533,6 +3333,8 @@ if (profileImageInputEl) {
 if (profileFormEl) {
   profileFormEl.addEventListener("submit", (event) => {
     event.preventDefault();
+    // When Supabase auth is active, let supabase-epiton.js handle the save
+    if (window._useFirebaseAuth) return;
 
     profileData.name = profileNameInputEl.value.trim() || defaultProfile.name;
     profileData.handle = profileHandleInputEl.value.trim() || defaultProfile.handle;
@@ -4411,70 +4213,51 @@ function _loadUserReels() {
 
   // ── Login form ────────────────────────────────────────────────────
   const loginForm = document.getElementById("authLoginForm");
-  if (loginForm) {
+  if (loginForm && !window._useFirebaseAuth) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       clearAuthError("authError");
-      const username = document.getElementById("authUsernameInput").value.trim();
-      const password = document.getElementById("authPasswordInput").value;
-      if (!username || !password) {
-        showAuthError("authError", "Please fill in all fields.");
-        return;
-      }
-      if (!accountExists(username)) {
-        showAuthError("authError", "No account found. Create one first.");
-        return;
-      }
-      if (!verifyAccount(username, password)) {
-        showAuthError("authError", "Incorrect password.");
-        return;
-      }
+      const username = document.getElementById("authUsernameInput")?.value.trim();
+      const password = document.getElementById("authPasswordInput")?.value;
+      if (!username || !password) { showAuthError("authError", "Please fill in all fields."); return; }
+      if (!accountExists(username)) { showAuthError("authError", "No account found. Create one first."); return; }
+      if (!verifyAccount(username, password)) { showAuthError("authError", "Incorrect password."); return; }
       doLogin(username);
     });
   }
 
   // ── Create account form ───────────────────────────────────────────
   const createForm = document.getElementById("authCreateForm");
-  if (createForm) {
+  if (createForm && !window._useFirebaseAuth) {
     createForm.addEventListener("submit", (e) => {
       e.preventDefault();
       clearAuthError("authCreateError");
-      const name     = document.getElementById("authCreateName").value.trim();
-      const username = document.getElementById("authCreateUsername").value.trim();
-      const password = document.getElementById("authCreatePassword").value;
-      if (!name || !username || !password) {
-        showAuthError("authCreateError", "Please fill in all fields.");
-        return;
-      }
-      if (!/^[a-zA-Z0-9._]{1,30}$/.test(username)) {
-        showAuthError("authCreateError", "Username: letters, numbers, . and _ only.");
-        return;
-      }
-      if (password !== STATIC_PASSWORD) {
-        showAuthError("authCreateError", 'Password must be "Epiton".');
-        return;
-      }
-      if (accountExists(username)) {
-        showAuthError("authCreateError", "Username already taken.");
-        return;
-      }
+      const name     = document.getElementById("authCreateName")?.value.trim();
+      const username = document.getElementById("authCreateUsername")?.value.trim();
+      const password = document.getElementById("authCreatePassword")?.value;
+      if (!name || !username || !password) { showAuthError("authCreateError", "Please fill in all fields."); return; }
+      if (!/^[a-zA-Z0-9._]{1,30}$/.test(username)) { showAuthError("authCreateError", "Username: letters, numbers, . and _ only."); return; }
+      if (password !== STATIC_PASSWORD) { showAuthError("authCreateError", 'Password must be "Epiton".'); return; }
+      if (accountExists(username)) { showAuthError("authCreateError", "Username already taken."); return; }
       createAccount(name, username, password);
       doLogin(username);
     });
   }
 
   // ── Panel navigation ──────────────────────────────────────────────
-  const createBtn   = document.getElementById("authCreateAccountBtn");
-  const switchBtn   = document.getElementById("authSwitchAccountBtn");
-  const backLogin1  = document.getElementById("authBackToLoginBtn");
-  const switchBack  = document.getElementById("authSwitchBackBtn");
-  const addAccBtn   = document.getElementById("authAddAccountBtn");
-
-  if (createBtn)  createBtn.addEventListener("click",  () => showPanel(createPanel));
-  if (switchBtn)  switchBtn.addEventListener("click",  () => { renderSwitchPanel(); showPanel(switchPanel); });
-  if (backLogin1) backLogin1.addEventListener("click", () => showPanel(loginPanel));
-  if (switchBack) switchBack.addEventListener("click", () => showPanel(loginPanel));
-  if (addAccBtn)  addAccBtn.addEventListener("click",  () => showPanel(createPanel));
+  // ── Panel navigation (legacy only) ───────────────────────────────
+  if (!window._useFirebaseAuth) {
+    const createBtn   = document.getElementById("authCreateAccountBtn");
+    const switchBtn   = document.getElementById("authSwitchAccountBtn");
+    const backLogin1  = document.getElementById("authBackToLoginBtn");
+    const switchBack  = document.getElementById("authSwitchBackBtn");
+    const addAccBtn   = document.getElementById("authAddAccountBtn");
+    if (createBtn)  createBtn.addEventListener("click",  () => showPanel(createPanel));
+    if (switchBtn)  switchBtn.addEventListener("click",  () => { renderSwitchPanel(); showPanel(switchPanel); });
+    if (backLogin1) backLogin1.addEventListener("click", () => showPanel(loginPanel));
+    if (switchBack) switchBack.addEventListener("click", () => showPanel(loginPanel));
+    if (addAccBtn)  addAccBtn.addEventListener("click",  () => showPanel(createPanel));
+  }
 
   // ── Switch panel ──────────────────────────────────────────────────
   function renderSwitchPanel() {
@@ -4546,22 +4329,23 @@ function _loadUserReels() {
   }
 
   function doLogout() {
+    // Skip legacy logout when Supabase auth is active
+    if (window._useFirebaseAuth) return;
     const session = getSession();
     if (session) saveUserData(session.username);
     clearSession();
     showOverlay(loginPanel);
-    // clear login form
     const uInput = document.getElementById("authUsernameInput");
     const pInput = document.getElementById("authPasswordInput");
     if (uInput) uInput.value = "";
     if (pInput) pInput.value = "";
     clearAuthError("authError");
-    // close profile page if open
     closeMyProfilePage();
   }
 
   // ── Wire logout + switch buttons in profile page ──────────────────
   document.addEventListener("click", (e) => {
+    if (window._useFirebaseAuth) return; // Supabase handles these
     if (e.target && e.target.id === "myProfileLogoutBtn") {
       doLogout();
     }
@@ -4572,20 +4356,380 @@ function _loadUserReels() {
     }
   });
 
-  // ── Boot: show login if no session ────────────────────────────────
-  const session = getSession();
-  if (!session) {
-    showOverlay(loginPanel);
+  // ── Boot: require login — no guest auto-login ────────────────────
+  if (window._useFirebaseAuth) {
+    // Show auth overlay immediately — Firebase module hides it after login
+    if (overlay) overlay.hidden = false;
+    window._auth = { doLogout, doLogin, getSession, saveUserData };
+    window._hideAuthOverlay = hideOverlay;
+    // NOTE: The main try/catch init block below handles all rendering
+    // Do NOT call renderPosts/renderReels etc here — they run in the init block
   } else {
-    // validate session still has a valid account
-    if (!accountExists(session.username)) {
-      clearSession();
-      showOverlay(loginPanel);
-    } else {
+    // Legacy local auth — require login, no guest
+    const session = getSession();
+    if (session && accountExists(session.username)) {
       hideOverlay();
+    } else {
+      clearSession();
+      if (overlay) overlay.hidden = false;
     }
   }
 
-  // expose for external use
   window._auth = { doLogout, doLogin, getSession, saveUserData };
+})();
+
+
+// ===== MOBILE: OVERLAY MANAGEMENT + BOTTOM NAV (Tasks 6–9, 11–14) =====
+
+// ── Task 6: closeAllOverlays + scroll-lock helpers ────────────────
+const _openOverlayIds = new Set();
+
+function openOverlay(id) {
+  _openOverlayIds.add(id);
+  document.body.classList.add("overlay-open");
+}
+
+function closeOverlay(id) {
+  _openOverlayIds.delete(id);
+  if (_openOverlayIds.size === 0) {
+    document.body.classList.remove("overlay-open");
+  }
+}
+
+function closeAllOverlays() {
+  // Hide every overlay
+  const overlayIds = [
+    "messageInbox", "reelsPage", "snapsPage", "notificationsPanel",
+    "searchOverlay", "profileEditor", "contactProfileModal", "newMsgModal",
+    "storyUploadModal", "storyViewer", "authOverlay", "myProfilePage", "themeStudio",
+    "peoplePage"
+  ];
+
+  overlayIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (id === "messageInbox") {
+      el.classList.remove("open");
+    } else if (id === "themeStudio") {
+      el.classList.remove("is-open");
+      el.setAttribute("aria-hidden", "true");
+    } else {
+      el.hidden = true;
+      el.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  // Reset keyboard-handler inline styles on inbox
+  const inbox = document.getElementById("messageInbox");
+  if (inbox) {
+    inbox.style.height = "";
+    inbox.style.transform = "";
+  }
+
+  // Clear tracking set and remove scroll-lock
+  _openOverlayIds.clear();
+  document.body.classList.remove("overlay-open");
+}
+
+// ── Task 7: Delegated bottom nav click handler ────────────────────
+(function () {
+  const bottomNav = document.getElementById("mobileBottomNav");
+  if (!bottomNav) return;
+
+  function setActiveNavItem(navKey) {
+    bottomNav.querySelectorAll("[data-nav]").forEach((item) => {
+      item.classList.toggle("active", item.dataset.nav === navKey);
+    });
+  }
+
+  bottomNav.addEventListener("click", (e) => {
+    const item = e.target.closest("[data-nav]");
+    if (!item) return;
+    e.preventDefault();
+    const nav = item.dataset.nav;
+
+    closeAllOverlays();
+    setActiveNavItem(nav);
+
+    switch (nav) {
+      case "home":
+        // Just close overlays — feed is always behind
+        break;
+
+      case "search": {
+        const overlay = document.getElementById("searchOverlay");
+        if (overlay) {
+          overlay.hidden = false;
+          overlay.setAttribute("aria-hidden", "false");
+          openOverlay("searchOverlay");
+          const input = document.getElementById("searchInput");
+          if (input) setTimeout(() => input.focus(), 80);
+        }
+        break;
+      }
+
+      case "reels": {
+        const page = document.getElementById("reelsPage");
+        if (page) {
+          page.hidden = false;
+          openOverlay("reelsPage");
+          // auto-play first video
+          const firstVid = document.querySelector("#reelsFeed .reel-video");
+          if (firstVid) { firstVid.muted = true; firstVid.play().catch(() => {}); }
+        }
+        break;
+      }
+
+      case "snaps": {
+        const page = document.getElementById("snapsPage");
+        if (page) {
+          page.hidden = false;
+          page.setAttribute("aria-hidden", "false");
+          openOverlay("snapsPage");
+        }
+        break;
+      }
+
+      case "dm": {
+        const inbox = document.getElementById("messageInbox");
+        if (inbox) {
+          inbox.classList.add("open");
+          openOverlay("messageInbox");
+          setMobileChatView(false);
+        }
+        break;
+      }
+
+      case "notifications": {
+        const panel = document.getElementById("notificationsPanel");
+        if (panel) {
+          panel.hidden = false;
+          panel.setAttribute("aria-hidden", "false");
+          openOverlay("notificationsPanel");
+          renderNotifications();
+        }
+        break;
+      }
+
+      case "profile": {
+        openMyProfilePage();
+        openOverlay("myProfilePage");
+        break;
+      }
+
+      case "people": {
+        if (window._openPeoplePage) {
+          window._openPeoplePage();
+        } else {
+          const page = document.getElementById("peoplePage");
+          if (page) {
+            page.hidden = false;
+            page.setAttribute("aria-hidden", "false");
+            openOverlay("peoplePage");
+          }
+        }
+        break;
+      }
+    }
+  });
+})();
+
+// ── Task 8: Mobile nav badge updates ─────────────────────────────
+function updateMobNavBadge(type, count) {
+  // type: "dm" | "notifications"
+  const badgeId = type === "dm" ? "mobDmBadge" : type === "notifications" ? "mobNotifBadge" : null;
+  if (!badgeId) return;
+  const badge = document.getElementById(badgeId);
+  if (!badge) return;
+  const safeCount = Math.max(0, Number(count) || 0);
+  if (safeCount > 0) {
+    badge.textContent = safeCount > 99 ? "99+" : String(safeCount);
+    badge.style.display = "flex";
+  } else {
+    badge.style.display = "none";
+  }
+}
+
+// Patch updateNotifBadge to also update mobile badge
+const _origUpdateNotifBadge = typeof updateNotifBadge === "function" ? updateNotifBadge : null;
+function updateNotifBadge() {
+  // Update sidebar badge
+  const badgeEl = document.getElementById("notifNavBadge");
+  if (badgeEl) {
+    const count = notifications.length;
+    if (count > 0) {
+      badgeEl.textContent = count > 99 ? "99+" : String(count);
+      badgeEl.style.display = "inline-flex";
+    } else {
+      badgeEl.style.display = "none";
+    }
+  }
+  // Update mobile bottom nav badge
+  updateMobNavBadge("notifications", notifications.length);
+}
+
+// Patch renderUnreadCount to also update mobile DM badge
+const _origRenderUnreadCount = typeof renderUnreadCount === "function" ? renderUnreadCount : null;
+function renderUnreadCount() {
+  const totalUnread = conversations.reduce((sum, c) => sum + c.unread, 0);
+  if (unreadCountEl) unreadCountEl.textContent = totalUnread > 0 ? `${totalUnread} unread` : "";
+  updateMobNavBadge("dm", totalUnread);
+}
+
+// ── Task 9: visualViewport keyboard handler ───────────────────────
+function handleViewportResize() {
+  if (!isMobileViewport()) return;
+  const inbox = document.getElementById("messageInbox");
+  if (!inbox) return;
+  const vv = window.visualViewport;
+  if (!vv) return;
+  const keyboardHeight = window.innerHeight - vv.height;
+  inbox.style.height = vv.height + "px";
+  inbox.style.transform = keyboardHeight > 0 ? `translateY(-${keyboardHeight}px)` : "";
+}
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", handleViewportResize);
+} else {
+  // Fallback: window resize
+  window.addEventListener("resize", () => {
+    if (!isMobileViewport()) return;
+    const inbox = document.getElementById("messageInbox");
+    if (!inbox) return;
+    const clientH = document.documentElement.clientHeight;
+    const keyboardHeight = window.innerHeight - clientH;
+    inbox.style.height = clientH + "px";
+    inbox.style.transform = keyboardHeight > 0 ? `translateY(-${keyboardHeight}px)` : "";
+  });
+}
+
+// ── Task 11: Chat back-button + scroll-to-bottom ──────────────────
+// Ensure chatBackBtn closes chat panel and restores inbox sidebar
+(function () {
+  const backBtn = document.getElementById("chatBackBtn");
+  if (!backBtn) return;
+  // Override: remove any existing listener by replacing the element clone
+  const newBackBtn = backBtn.cloneNode(true);
+  backBtn.parentNode.replaceChild(newBackBtn, backBtn);
+  newBackBtn.addEventListener("click", () => {
+    setMobileChatView(false);
+    closeOverlay("chat-panel");
+  });
+})();
+
+// renderChatPanel already scrolls to bottom (chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight)
+// No patch needed — the original implementation handles this correctly.
+
+// Also scroll to bottom after sending a message — patch chatForm submit
+(function () {
+  const form = document.getElementById("chatForm");
+  if (!form) return;
+  form.addEventListener("submit", () => {
+    // After the existing handler runs, scroll to bottom
+    setTimeout(() => {
+      if (chatMessagesEl) chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }, 0);
+  });
+})();
+
+// ── Task 12: Wire close buttons for overlays opened via bottom nav ─
+// Reels close buttons
+(function () {
+  ["reelsCloseBtn", "reelsMobileCloseBtn", "reelsCloseBtnDesktop"].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      const page = document.getElementById("reelsPage");
+      if (page) { page.hidden = true; }
+      closeOverlay("reelsPage");
+    });
+  });
+
+  // Snaps close button
+  const snapsClose = document.getElementById("snapsCloseBtn");
+  if (snapsClose) {
+    snapsClose.addEventListener("click", () => {
+      const page = document.getElementById("snapsPage");
+      if (page) { page.hidden = true; page.setAttribute("aria-hidden", "true"); }
+      closeOverlay("snapsPage");
+    });
+  }
+
+  // Notifications close button
+  const notifClose = document.getElementById("notificationsPanelCloseBtn");
+  if (notifClose) {
+    notifClose.addEventListener("click", () => {
+      const panel = document.getElementById("notificationsPanel");
+      if (panel) { panel.hidden = true; panel.setAttribute("aria-hidden", "true"); }
+      closeOverlay("notificationsPanel");
+    });
+  }
+
+  // Search close button
+  const searchClose = document.getElementById("searchCloseBtn");
+  if (searchClose) {
+    searchClose.addEventListener("click", () => {
+      const overlay = document.getElementById("searchOverlay");
+      if (overlay) { overlay.hidden = true; }
+      closeOverlay("searchOverlay");
+    });
+  }
+
+  // Inbox close button
+  const inboxClose = document.getElementById("inboxCloseBtn");
+  if (inboxClose) {
+    inboxClose.addEventListener("click", () => {
+      const inbox = document.getElementById("messageInbox");
+      if (inbox) { inbox.classList.remove("open"); }
+      closeOverlay("messageInbox");
+    });
+  }
+
+  // DM → People button
+  const dmPeopleBtn = document.getElementById("dmPeopleBtn");
+  if (dmPeopleBtn) {
+    dmPeopleBtn.addEventListener("click", () => {
+      // Close inbox first
+      const inbox = document.getElementById("messageInbox");
+      if (inbox) inbox.classList.remove("open");
+      closeOverlay("messageInbox");
+      // Open people page
+      const peoplePage = document.getElementById("peoplePage");
+      if (peoplePage) {
+        peoplePage.hidden = false;
+        peoplePage.setAttribute("aria-hidden", "false");
+        if (typeof openOverlay === "function") openOverlay("peoplePage");
+        if (window._loadPeoplePage) window._loadPeoplePage();
+        else setTimeout(() => { if (window._loadPeoplePage) window._loadPeoplePage(); }, 1500);
+      }
+    });
+  }
+
+  // My profile close button
+  const myProfileClose = document.getElementById("myProfileCloseBtn");
+  if (myProfileClose) {
+    myProfileClose.addEventListener("click", () => {
+      closeMyProfilePage();
+      closeOverlay("myProfilePage");
+    });
+  }
+})();
+
+// ── Task 13: Profile save + theme selection already wired ─────────
+// Profile form submit already calls saveProfile() → localStorage[PROFILE_KEY]
+// Theme switches already call applyTheme() → document.documentElement.dataset.theme
+// Both verified as working — no additional wiring needed.
+
+// ── Task 14: Search overlay already uses position:fixed inset:0 ───
+// Confirmed in CSS: #searchOverlay { position: fixed; inset: 0; z-index: 400 }
+// searchInput.focus() called in bottom nav handler above.
+// No additional changes needed.
+
+// ── Initial badge sync on load ────────────────────────────────────
+(function () {
+  // Sync DM badge
+  const totalUnread = conversations.reduce((sum, c) => sum + c.unread, 0);
+  updateMobNavBadge("dm", totalUnread);
+  // Sync notifications badge
+  updateMobNavBadge("notifications", notifications.length);
 })();
